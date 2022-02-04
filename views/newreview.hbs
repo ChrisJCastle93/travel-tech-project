@@ -1,0 +1,20 @@
+{{! We also need a form to allow our users to add a room to our airbnb in the application. }}
+
+
+<h2>New Review From: {{user.companyName}} </h2>
+<form action="/newreview" method="POST" id="form-container">
+  <div>
+    <label for="name">Name</label>
+    <input id="name" type="text" name="name" />
+  </div>
+  <div>
+    <label for="desc">Description</label>
+    <input id="desc" type="text" name="desc" />
+  </div>
+  {{#if errorMessage}}
+    <div class="error-message">{{errorMessage}}</div>
+  {{/if}}
+  <div>
+    <button>Leave Review</button>
+  </div>
+</form>

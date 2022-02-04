@@ -1,0 +1,5 @@
+Start: NPM RUN DEV
+
+Last update: 
+- you updated the User, Review, Companies models, but you need to update the user flows and check that they are working.
+- connect ensure login isn't working...
