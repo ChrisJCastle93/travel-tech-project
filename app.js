@@ -23,7 +23,7 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 // to connect to DB: mongosh "mongodb+srv://chrisjcastle93:dougal22@cluster0.ey3wh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 
 mongoose
-  .connect(process.env.MONGODB_URL, {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -63,7 +63,7 @@ app.use(
       maxAge: 10060000, // 60 * 1000 ms === 1 min
     },
     store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URL,
+      MONGODB_URI: process.env.MONGODB_URI,
       mongoOptions: advancedOptions, // See below for details
     }),
   })
