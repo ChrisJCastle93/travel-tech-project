@@ -1,4 +1,3 @@
-require("dotenv").config();
 
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -18,28 +17,30 @@ const LocalStrategy = require("passport-local").Strategy;
 const flash = require("connect-flash");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
+require("dotenv").config();
+
 // MONGOOSE SETUP
 
 // to connect to DB: mongosh "mongodb+srv://chrisjcastle93:dougal22@cluster0.ey3wh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 
-mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then((x) => {
-    console.log(
-      `Connected to Mongo! Database name: "${x.connections[0].name}"`
-    );
-  })
-  .catch((err) => {
-    console.error("Error connecting to mongo", err);
-  });
+// mongoose
+//   .connect(process.env.MONGODB_URI, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .then((x) => {
+//     console.log(
+//       `Connected to Mongo! Database name: "${x.connections[0].name}"`
+//     );
+//   })
+//   .catch((err) => {
+//     console.error("Error connecting to mongo", err);
+//   });
 
-const app_name = require("./package.json").name;
-const debug = require("debug")(
-  `${app_name}:${path.basename(__filename).split(".")[0]}`
-);
+// const app_name = require("./package.json").name;
+// const debug = require("debug")(
+//   `${app_name}:${path.basename(__filename).split(".")[0]}`
+// );
 
 // MODEL SETUP
 
@@ -50,11 +51,6 @@ const Company = require("./models/company.js");
 // INITIALIZE EXPRESS
 
 const app = express();
-
-// const options = { useNewUrlParser: true, useUnifiedTopology: true, mongoUrl: process.env.MONGODB_URI};
-
-const dbString = process.env.MONGODB_URI;
-console.log(typeof dbString);
 
 const clientP = mongoose
   .connect(
