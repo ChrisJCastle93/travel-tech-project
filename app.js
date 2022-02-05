@@ -51,13 +51,31 @@ const Company = require("./models/company.js");
 
 const app = express();
 
-const options = { useNewUrlParser: true, useUnifiedTopology: true, mongoUrl: process.env.MONGODB_URI};
+// const options = { useNewUrlParser: true, useUnifiedTopology: true, mongoUrl: process.env.MONGODB_URI};
+
+const clientP = mongoose.connect(
+  process.env.MONGODB_URI,
+  { useNewUrlParser: true, useUnifiedTopology: true }
+).then(m => m.connection.getClient())
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
-  // store: MongoStore.create( mongoUrl: `'${process.env.MONGODB_URI}'` )
-  store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI, options })
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    clientPromise: clientP,
+    dbName: "myFirstDatabase",
+    stringify: false,
+    autoRemove: 'interval',
+    autoRemoveInterval: 1
+  })
 }));
+
+// app.use(session({
+//   secret: process.env.SESSION_SECRET,
+//   // store: MongoStore.create( mongoUrl: `'${process.env.MONGODB_URI}'` )
+//   store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI, options })
+// }));
 
 // app.use(
 //   session({
