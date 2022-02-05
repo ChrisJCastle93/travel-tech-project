@@ -11,9 +11,7 @@ const userSchema = new Schema(
     lastName: String,
     googleId: {type: String},
     email: String,
-    verified: Boolean,
     companyName: String,
-    // passwordHash: String,
     adminCompany: {
       type: Schema.Types.ObjectId,
       ref: 'Company'
@@ -23,7 +21,6 @@ const userSchema = new Schema(
       ref: 'Review'
     }],
     password: String,
-    googleID: String,
   },
   {
     timestamps: true

@@ -53,25 +53,28 @@ const app = express();
 
 const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true};
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    // client: dbConnection.getClient(),
-    // collectionName: 'sessions',
-    resave: true,
-    saveUninitialized: false, // <== false if you don't want to save empty session object to the store
-    cookie: {
-      httpOnly: true,
-      maxAge: 10060000, // 60 * 1000 ms === 1 min
-    },
-    store: MongoStore.create({
-      // MONGODB_URI: process.env.MONGODB_URI,
-      // mongoUrl: process.env.MONGODB_URI,
-      mongoUrl: 'mongodb+srv://cluster0.ey3wh.mongodb.net/myFirstDatabase',
-      mongoOptions: advancedOptions, // See below for details
-    }),
-  })
-);
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  store: MongoStore.create( { mongoUrl: process.env.MONGODB_URI })
+}));
+
+// app.use(
+//   session({
+//     secret: process.env.SESSION_SECRET,
+//     // client: dbConnection.getClient(),
+//     // collectionName: 'sessions',
+//     resave: true,
+//     saveUninitialized: false, // <== false if you don't want to save empty session object to the store
+//     cookie: {
+//       httpOnly: true,
+//       maxAge: 10060000, // 60 * 1000 ms === 1 min
+//     },
+//     store: MongoStore.create({
+//       mongoUrl: process.env.MONGODB_URI,
+//       mongoOptions: advancedOptions, // See below for details
+//     }),
+//   })
+// );
 
 app.use(passport.initialize());
 app.use(passport.session());
