@@ -53,8 +53,10 @@ const app = express();
 
 // const options = { useNewUrlParser: true, useUnifiedTopology: true, mongoUrl: process.env.MONGODB_URI};
 
+const dbString = `'${process.env.MONGODB_URI}'`
+
 const clientP = mongoose.connect(
-  process.env.MONGODB_URI,
+  dbString,
   { useNewUrlParser: true, useUnifiedTopology: true }
 ).then(m => m.connection.getClient())
 
