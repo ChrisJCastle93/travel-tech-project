@@ -1,4 +1,3 @@
-
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const express = require("express");
@@ -33,9 +32,9 @@ require("dotenv").config();
 //       `Connected to Mongo! Database name: "${x.connections[0].name}"`
 //     );
 //   })
-//   .catch((err) => {
-//     console.error("Error connecting to mongo", err);
-//   });
+// .catch((err) => {
+//   console.error("Error connecting to mongo", err);
+// });
 
 // const app_name = require("./package.json").name;
 // const debug = require("debug")(
@@ -49,34 +48,6 @@ const Review = require("./models/review.js");
 const Company = require("./models/company.js");
 
 // INITIALIZE EXPRESS
-
-const app = express();
-
-const clientP = mongoose
-  .connect(
-    "mongodb+srv://chrisjcastle93:dougal22@cluster0.ey3wh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  )
-  .then((m) => m.connection.getClient());
-
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      maxAge: 10060000, // 60 * 1000 ms === 1 min
-    },
-    store: MongoStore.create({
-      clientPromise: clientP,
-      dbName: "myFirstDatabase",
-      stringify: false,
-      autoRemove: "interval",
-      autoRemoveInterval: 1,
-    }),
-  })
-);
 
 // app.use(session({
 //   secret: process.env.SESSION_SECRET,
@@ -101,6 +72,44 @@ app.use(
 //     }),
 //   })
 // );
+
+const app = express();
+console.log(process.env.MONGODB_URI, typeof process.env.MONGODB_URI)
+
+const clientP = mongoose
+  .connect(
+    // "mongodb+srv://chrisjcastle93:dougal22@cluster0.ey3wh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    process.env.MONGODB_URI,
+    { useNewUrlParser: true, useUnifiedTopology: true }
+  )
+  .then((m) => {
+    console.log(
+      `Connected to Mongo! Database name: "${m.connections[0].name}"`
+    );
+    return m.connection.getClient();
+  })
+  .catch((err) => {
+    console.error("Error connecting to mongo", err);
+  });
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      maxAge: 10060000, // 60 * 1000 ms === 1 min
+    },
+    store: MongoStore.create({
+      clientPromise: clientP,
+      dbName: "myFirstDatabase",
+      stringify: false,
+      autoRemove: "interval",
+      autoRemoveInterval: 1,
+    }),
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
