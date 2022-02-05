@@ -56,6 +56,8 @@ const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
+    // client: dbConnection.getClient(),
+    // collectionName: 'sessions',
     resave: true,
     saveUninitialized: false, // <== false if you don't want to save empty session object to the store
     cookie: {
@@ -63,7 +65,8 @@ app.use(
       maxAge: 10060000, // 60 * 1000 ms === 1 min
     },
     store: MongoStore.create({
-      MONGODB_URI: process.env.MONGODB_URI,
+      // MONGODB_URI: process.env.MONGODB_URI,
+      mongoUrl: process.env.MONGODB_URI,
       mongoOptions: advancedOptions, // See below for details
     }),
   })
