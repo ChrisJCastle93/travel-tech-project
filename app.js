@@ -74,13 +74,10 @@ const Company = require("./models/company.js");
 // );
 
 const app = express();
-const dbConnection = process.env.MONGODB_URI
 
 const clientP = mongoose
   .connect(
-    // "mongodb+srv://chrisjcastle93:dougal22@cluster0.ey3wh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
     process.env.MONGODB_URI,
-    // dbConnection,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then((m) => {
@@ -170,9 +167,8 @@ passport.use(
 passport.use(
   new GoogleStrategy(
     {
-      clientID:
-        "715802172124-m822aiov7h1g9bsqu1l7otumkbpbroou.apps.googleusercontent.com",
-      clientSecret: "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",
+      clientID: process.env.googleClientId,
+      clientSecret: process.env.googleSecret,
       callbackURL: "/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, cb) {
