@@ -36,10 +36,10 @@ require("dotenv").config();
 //   console.error("Error connecting to mongo", err);
 // });
 
-// const app_name = require("./package.json").name;
-// const debug = require("debug")(
-//   `${app_name}:${path.basename(__filename).split(".")[0]}`
-// );
+const app_name = require("./package.json").name;
+const debug = require("debug")(
+  `${app_name}:${path.basename(__filename).split(".")[0]}`
+);
 
 // MODEL SETUP
 
@@ -112,12 +112,12 @@ app.use(
   })
 );
 
-app.use(passport.initialize());
-app.use(passport.session());
 
 // MIDDLEWARE SETUP
 
 // DEFINING THE METHODS OF PASSPORT
+app.use(passport.initialize());
+app.use(passport.session());
 
 passport.serializeUser((user, cb) => {
   cb(null, user.id);
