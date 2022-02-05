@@ -11,6 +11,14 @@ const ensureLogin = require("connect-ensure-login");
 
 // SIGNUP
 
+// router.get("/login", (req, res, next) => {
+//   console.log('=================')
+//   console.log(req.session.id)
+//   console.log('=================')
+//   res.render("index")
+// });
+  
+
 router.get("/signup", (req, res, next) => res.render("auth/signup", { layout: false } ));
 
 router.post("/signup", (req, res, next) => {

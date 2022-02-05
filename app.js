@@ -98,6 +98,7 @@ app.use(
     cookie: {
       httpOnly: true,
       maxAge: 10060000, // 60 * 1000 ms === 1 min
+      // expires: false,
     },
     store: MongoStore.create({
       clientPromise: clientP,
@@ -167,8 +168,8 @@ passport.use(
 passport.use(
   new GoogleStrategy(
     {
-      clientID: "715802172124-m822aiov7h1g9bsqu1l7otumkbpbroou.apps.googleusercontent.com",
-      clientSecret: "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",
+      clientID: process.env.googleClientId,
+      clientSecret: process.env.googleSecret,
       callbackURL: "/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, cb) {
