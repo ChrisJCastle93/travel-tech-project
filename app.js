@@ -51,7 +51,7 @@ const Company = require("./models/company.js");
 
 const app = express();
 
-const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
+const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true, mongoUrl: process.env.MONGODB_URI,};
 
 app.use(
   session({
