@@ -51,14 +51,12 @@ const Company = require("./models/company.js");
 
 const app = express();
 
-const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true};
-
-console.log(`'${process.env.MONGODB_URI}'`)
+const options = { useNewUrlParser: true, useUnifiedTopology: true, mongoUrl: process.env.MONGODB_URI};
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
   // store: MongoStore.create( mongoUrl: `'${process.env.MONGODB_URI}'` )
-  store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI, advancedOptions })
+  store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI, options })
 }));
 
 // app.use(
