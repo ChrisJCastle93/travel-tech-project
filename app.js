@@ -53,25 +53,34 @@ const app = express();
 
 // const options = { useNewUrlParser: true, useUnifiedTopology: true, mongoUrl: process.env.MONGODB_URI};
 
-// const dbString = `${process.env.MONGODB_URI}`
+const dbString = process.env.MONGODB_URI;
+console.log(typeof dbString);
 
-const clientP = mongoose.connect(
-  'mongodb+srv://chrisjcastle93:dougal22@cluster0.ey3wh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
-  { useNewUrlParser: true, useUnifiedTopology: true }
-).then(m => m.connection.getClient())
+const clientP = mongoose
+  .connect(
+    "mongodb+srv://chrisjcastle93:dougal22@cluster0.ey3wh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    { useNewUrlParser: true, useUnifiedTopology: true }
+  )
+  .then((m) => m.connection.getClient());
 
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  store: MongoStore.create({
-    clientPromise: clientP,
-    dbName: "myFirstDatabase",
-    stringify: false,
-    autoRemove: 'interval',
-    autoRemoveInterval: 1
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      maxAge: 10060000, // 60 * 1000 ms === 1 min
+    },
+    store: MongoStore.create({
+      clientPromise: clientP,
+      dbName: "myFirstDatabase",
+      stringify: false,
+      autoRemove: "interval",
+      autoRemoveInterval: 1,
+    }),
   })
-}));
+);
 
 // app.use(session({
 //   secret: process.env.SESSION_SECRET,
