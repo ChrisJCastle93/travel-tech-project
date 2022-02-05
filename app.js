@@ -51,7 +51,7 @@ const Company = require("./models/company.js");
 
 const app = express();
 
-const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true, mongoUrl: process.env.MONGODB_URI,};
+const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true};
 
 app.use(
   session({
@@ -66,7 +66,8 @@ app.use(
     },
     store: MongoStore.create({
       // MONGODB_URI: process.env.MONGODB_URI,
-      mongoUrl: process.env.MONGODB_URI,
+      // mongoUrl: process.env.MONGODB_URI,
+      mongoUrl: 'mongodb+srv://cluster0.ey3wh.mongodb.net/myFirstDatabase',
       mongoOptions: advancedOptions, // See below for details
     }),
   })
