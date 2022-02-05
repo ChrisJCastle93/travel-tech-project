@@ -78,8 +78,8 @@ const dbConnection = process.env.MONGODB_URI
 
 const clientP = mongoose
   .connect(
-    "mongodb+srv://chrisjcastle93:dougal22@cluster0.ey3wh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    // process.env.MONGODB_URI,
+    // "mongodb+srv://chrisjcastle93:dougal22@cluster0.ey3wh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    process.env.MONGODB_URI,
     // dbConnection,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
