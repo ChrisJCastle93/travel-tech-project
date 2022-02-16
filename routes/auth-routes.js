@@ -22,34 +22,34 @@ const ensureLogin = require("connect-ensure-login");
 router.get("/signup", (req, res, next) => res.render("auth/signup", { layout: false } ));
 
 router.post("/signup", (req, res, next) => {
-  console.log(req.body);
   const { firstName, lastName, email, password, companyName } = req.body;
-  if (!email || !password) {
-    res.render("auth/signup", {
-      errorMessage: "Indicate username and password",
-    });
-    return;
-  }
-  User.findOne({ email })
+  if(!email || !password) {
+      console.log('USERNAME OR PASSWORD MISSING');
+      res.render("auth/signup", {
+        errorMessage: "Indicate username and password",
+      });
+      return;
+    }
+    User.findOne({ email })
     .then((user) => {
       if (user !== null) {
-        res.render("auth/signup", { message: "The username already exists" });
+        console.log('USERNAME ALREADY EXISTS IN DB');
+        res.render("auth/signup", { errorMessage: "The username already exists" });
         return;
       }
       const salt = bcrypt.genSaltSync(bcryptSalt);
       const hashPass = bcrypt.hashSync(password, salt);
-      const newUser = new User({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        verified: false,
-        companyName: companyName,
-        password: hashPass,
-      });
-      newUser
-        .save()
-        .then(() => {
-          console.log('new user created');
+      User
+        .create({
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          verified: false,
+          companyName: companyName,
+          password: hashPass,
+        })
+        .then((user) => {
+          console.log('new user created ', user.email);
           res.redirect("/");
         })
         .catch((err) => next(err));
@@ -61,7 +61,11 @@ router.post("/signup", (req, res, next) => {
 
 // LOGIN ROUTES
 
-router.get('/login', (req, res, next) => res.render('auth/login', { layout: false }));
+router.get('/login', (req, res, next) => {
+  res.locals.message = req.flash('message');
+  console.log(res.locals)
+  res.render('auth/login', { layout: false })
+});
 
 router.post('/login', passport.authenticate("local",{
   successRedirect : '/',
@@ -89,55 +93,10 @@ router.get('/auth/google/callback',
     res.redirect('/');
   });
 
-// AIRBNB ROUTES
 
-// router.get("/rooms", ensureLogin.ensureLoggedIn(), (req, res, next) => {
-//   const { _id } = req.user;
-//   Room.find({ owner: _id })
-//   .populate('owner')
-//   .then((myRooms) => res.render("rooms", { user: req.user,  rooms: myRooms }))
-//   .catch((err) => next(err));
-// });
-
-// // AIRBNB NEW ROOMS
-
-// router.get("/newroom", ensureLogin.ensureLoggedIn(), (req, res, next) => {
-//   res.render("newroom", { user: req.user });
-// });
-
-// router.post("/newroom", ensureLogin.ensureLoggedIn(), (req, res, next) => {
-//   const { name, desc } = req.body;
-//   const { _id } = req.user; // <-- Id from the logged user
-//   Room.create({
-//     name,
-//     desc,
-//     owner: _id,
-//   })
-//     .then(() => res.redirect("/rooms"))
-//     .catch((err) => next(err));
-// });
-
-// LEAVE A NEW REVIEW
-
-// router.get("/newreview", ensureLogin.ensureLoggedIn(), (req, res, next) => {
-//   res.render("newreview", { user: req.user });
-// });
-
-router.get('/newreview', (req, res, next) => {
-    res.render('newreview', { user: req.user });
-  });
-
-// router.post("/newroom", ensureLogin.ensureLoggedIn(), (req, res, next) => {
-//   const { name, desc } = req.body;
-//   const { _id } = req.user; // <-- Id from the logged user
-//   Room.create({
-//     name,
-//     desc,
-//     owner: _id,
-//   })
-//     .then(() => res.redirect("/rooms"))
-//     .catch((err) => next(err));
-// });
+// router.get('/newreview', (req, res, next) => {
+//     res.render('newreview', { user: req.user });
+//   });
 
 // Passport exposes a logout() function on req object that can be called from any route handler which needs to terminate a login session. We will declare the logout route in the auth-routes.js file as it follows:
 

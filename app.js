@@ -20,22 +20,6 @@ require("dotenv").config();
 
 // MONGOOSE SETUP
 
-// to connect to DB: mongosh "mongodb+srv://chrisjcastle93:dougal22@cluster0.ey3wh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-
-// mongoose
-//   .connect(process.env.MONGODB_URI, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   })
-//   .then((x) => {
-//     console.log(
-//       `Connected to Mongo! Database name: "${x.connections[0].name}"`
-//     );
-//   })
-// .catch((err) => {
-//   console.error("Error connecting to mongo", err);
-// });
-
 const app_name = require("./package.json").name;
 const debug = require("debug")(
   `${app_name}:${path.basename(__filename).split(".")[0]}`
@@ -49,37 +33,13 @@ const Company = require("./models/company.js");
 
 // INITIALIZE EXPRESS
 
-// app.use(session({
-//   secret: process.env.SESSION_SECRET,
-//   // store: MongoStore.create( mongoUrl: `'${process.env.MONGODB_URI}'` )
-//   store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI, options })
-// }));
-
-// app.use(
-//   session({
-//     secret: process.env.SESSION_SECRET,
-//     // client: dbConnection.getClient(),
-//     // collectionName: 'sessions',
-//     resave: true,
-//     saveUninitialized: false, // <== false if you don't want to save empty session object to the store
-//     cookie: {
-//       httpOnly: true,
-//       maxAge: 10060000, // 60 * 1000 ms === 1 min
-//     },
-//     store: MongoStore.create({
-//       mongoUrl: process.env.MONGODB_URI,
-//       mongoOptions: advancedOptions, // See below for details
-//     }),
-//   })
-// );
-
 const app = express();
 
 const clientP = mongoose
-  .connect(
-    process.env.MONGODB_URI,
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  )
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then((m) => {
     console.log(
       `Connected to Mongo! Database name: "${m.connections[0].name}"`
@@ -110,8 +70,20 @@ app.use(
   })
 );
 
-
 // MIDDLEWARE SETUP
+
+app.use(function (req, res, next) {
+  const err = req.session.error;
+  const msg = req.session.notice;
+  const success = req.session.success;
+  delete req.session.error;
+  delete req.session.success;
+  delete req.session.notice;
+  if (err) res.locals.error = err;
+  if (msg) res.locals.notice = msg;
+  if (success) res.locals.success = success;
+  next();
+});
 
 // DEFINING THE METHODS OF PASSPORT
 app.use(passport.initialize());
@@ -134,32 +106,33 @@ passport.use(
       usernameField: "email",
       passwordField: "password",
     },
-    (req, email, password, next) => {
-      // console.log(email, password)
+    (req, email, password, done) => {
       User.findOne({ email })
         .then((user) => {
-          // console.log('USER: ', user)
           if (!user) {
-            console.log("Username or password incorrect");
-            return next(null, false, {
-              message: "Username or password incorrect",
+            console.log("USER NOT IN DB");
+            req.session.error = "USER NOT IN DB";
+            return done(null, false, {
+              message: "That email is not registered",
             });
           }
-          if (bcrypt.compare(password, user.password)) {
-            bcrypt
-              .compare(password, user.password)
-              .then((result) => console.log(result));
-            return next(null, user);
-          } else {
-            console.log("2nd... USERNAME OR PASSWROD INCORRECT");
-            return next(null, false, {
-              message: "Username or password incorrect",
-            });
-          }
+          bcrypt.compare(password, user.password).then((result) => {
+            if (result) {
+              console.log("PASSWORD MATCH");
+              req.session.success = "Successful Login";
+              return done(null, user);
+            } else {
+              console.log("PASSWROD INCORRECT");
+              req.session.error = "INCORRECT PASSWORD";
+              return done(null, false, {
+                message: "Password incorrect",
+              });
+            }
+          });
         })
         .catch((error) => {
           console.log(error);
-          next(error);
+          done(error);
         });
     }
   )

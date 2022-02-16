@@ -8,6 +8,11 @@
 {{/unless}} --}}
 
 <section class="w-full bg-white dark:bg-wickeddark">
+      {{#if success}}
+    <div class="p-4 mb-4 w-1/2 text-sm text-center text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800" role="alert">
+      <p>{{success}}</p>
+      </div>
+    {{/if}}
   <div
     class="relative items-center w-full px-5 py-12 mx-auto md:px-12 lg:px-16 max-w-7xl lg:py-24"
   >
