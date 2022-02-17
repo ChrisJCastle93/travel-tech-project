@@ -10,7 +10,14 @@ const userSchema = new Schema(
     firstName: String,
     lastName: String,
     googleId: {type: String},
-    email: String,
+    email: {
+      type: String,
+      // required: [true, 'Email is required.'],
+      match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address.'],
+      unique: true,
+      lowercase: true,
+      trim: true
+    },
     companyName: String,
     adminCompany: {
       type: Schema.Types.ObjectId,

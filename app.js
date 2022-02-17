@@ -138,15 +138,31 @@ passport.use(
   )
 );
 
+// passport.use(
+//   new GoogleStrategy(
+//     {
+//       clientID: process.env.googleClientId,
+//       clientSecret: process.env.googleSecret,
+//       callbackURL: "/auth/google/callback",
+//       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+//     },
+//     function (accessToken, refreshToken, profile, cb) {
+//       User.findOrCreate({googleId: profile.id}, function (err, user) {
+//         return cb(err, user);
+//       });
+//     }
+//   )
+// );
+
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.googleClientId,
       clientSecret: process.env.googleSecret,
       callbackURL: "/auth/google/callback",
-    },
+},
     function (accessToken, refreshToken, profile, cb) {
-      User.findOrCreate({ googleId: profile.id }, function (err, user) {
+      User.findOrCreate({ googleId: profile.id, email: profile.emails[0].value, firstName: profile.name.givenName, lastName: profile.name.familyName }, function (err, user) {
         return cb(err, user);
       });
     }
