@@ -10,9 +10,13 @@ const companySchema = Schema({
     usp: [String],
     website: String,
   },
-  admin: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
+  // admin: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: "User",
+  // },
+    verified: {
+    type: Boolean,
+    default: false
   },
   reviews: [
     {

@@ -50,6 +50,8 @@ const clientP = mongoose
     console.error("Error connecting to mongo", err);
   });
 
+mongoose.set("useCreateIndex", true);
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -119,6 +121,7 @@ passport.use(
           bcrypt.compare(password, user.password).then((result) => {
             if (result) {
               console.log("PASSWORD MATCH");
+              req.session.currentUser = user;
               req.session.success = "Successful Login";
               return done(null, user);
             } else {
@@ -160,11 +163,21 @@ passport.use(
       clientID: process.env.googleClientId,
       clientSecret: process.env.googleSecret,
       callbackURL: "/auth/google/callback",
-},
-    function (accessToken, refreshToken, profile, cb) {
-      User.findOrCreate({ googleId: profile.id, email: profile.emails[0].value, firstName: profile.name.givenName, lastName: profile.name.familyName }, function (err, user) {
-        return cb(err, user);
-      });
+      passReqToCallback: true
+    },
+    function (req, accessToken, refreshToken, profile, cb) {
+      User.findOrCreate(
+        {
+          googleId: profile.id,
+          email: profile.emails[0].value,
+          firstName: profile.name.givenName,
+          lastName: profile.name.familyName,
+        },
+        function (err, user) {
+          req.session.currentUser = user;
+          return cb(err, user);
+        }
+      );
     }
   )
 );
@@ -180,6 +193,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Express View engine setup
 
+// app.engine('handlebars', hbs.engine);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
 app.use(express.static(path.join(__dirname, "public")));
@@ -187,7 +201,7 @@ app.use(favicon(path.join(__dirname, "public", "images", "favicon.ico")));
 
 // default value for title local
 
-app.locals.title = "ResTechRater";
+app.locals.title = "TrustedTravelTech";
 
 // Last, but not least, we will have to define the routes in the app.js file. We will mount our authentication routes on the / path.
 
@@ -197,8 +211,10 @@ const index = require("./routes/index");
 app.use("/", index);
 
 const router = require("./routes/auth-routes");
-
 app.use("/", router);
+
+const reviews = require("./routes/review-routes");
+app.use("/reviews", reviews);
 
 app.use(function (req, res, next) {
   res.status(404).render("404");

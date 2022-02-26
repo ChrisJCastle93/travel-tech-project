@@ -11,6 +11,55 @@ Document
 Use a better box model (opinionated).
 */
 
+.txt-center {
+  text-align: center;
+}
+
+.hide {
+  display: none;
+}
+
+.clear {
+  float: none;
+  clear: both;
+}
+
+.rating {
+    text-align: center;
+    position: relative;
+    direction: rtl;
+  }
+  
+.rating > label {
+    display: inline;
+    padding: 0;
+    margin: auto;
+    position: relative;
+    width: auto;
+    height: auto;
+    font-size: 2em;
+    cursor: pointer;
+    color: #B4C0D8;
+
+  }
+  
+  .rating > label:hover,
+  .rating > label:hover ~ label,
+  .rating > input.radio-btn:checked ~ label {
+    /* color: orange; */
+    color: transparent;
+  }
+
+.rating > label:hover:before,
+.rating > label:hover ~ label:before,
+.rating > input.radio-btn:checked ~ label:before,
+.rating > input.radio-btn:checked ~ label:before {
+    content: "\2605";
+    position: absolute;
+    left: 0;
+    color: #FFD700;
+}
+
 *,
 ::before,
 ::after {

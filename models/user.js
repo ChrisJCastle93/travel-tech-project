@@ -12,17 +12,17 @@ const userSchema = new Schema(
     googleId: {type: String},
     email: {
       type: String,
-      // required: [true, 'Email is required.'],
+      required: [true, 'Email is required.'],
       match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address.'],
       unique: true,
       lowercase: true,
       trim: true
     },
     companyName: String,
-    adminCompany: {
-      type: Schema.Types.ObjectId,
-      ref: 'Company'
-    },
+    // adminCompany: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: 'Company'
+    // },
     reviews: [{
       type: Schema.Types.ObjectId,
       ref: 'Review'

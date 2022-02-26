@@ -8,6 +8,7 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt"); // secures passwords. We specified a hash of 10 characters here.
 const bcryptSalt = 10;
 const ensureLogin = require("connect-ensure-login");
+const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
 
 // SIGNUP
 
@@ -18,12 +19,19 @@ const ensureLogin = require("connect-ensure-login");
 //   res.render("index")
 // });
 
-router.get("/signup", (req, res, next) =>
+router.get("/signup", isLoggedOut, (req, res, next) =>
   res.render("auth/signup", { layout: false })
 );
 
-router.post("/signup", (req, res, next) => {
+router.post("/signup", isLoggedOut, (req, res, next) => {
   const { firstName, lastName, email, password, companyName } = req.body;
+  const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+  if (!regex.test(password)) {
+    res
+      .status(500)
+      .render('auth/signup', { layout: false, errorMessage: 'Password needs to have at least 6 chars and must contain at least one number, one lowercase and one uppercase letter.' });
+    return;
+  }
   if (!email || !password) {
     console.log("USERNAME OR PASSWORD MISSING");
     res.render("auth/signup", {
@@ -76,14 +84,14 @@ router.post("/signup", (req, res, next) => {
 
 // LOGIN ROUTES
 
-router.get("/login", (req, res, next) => {
+router.get("/login", isLoggedOut, (req, res, next) => {
   // res.locals.message = req.flash("message");
   // console.log(res.locals);
   res.render("auth/login", { layout: false });
 });
 
 router.post(
-  "/login",
+  "/login", isLoggedOut, 
   passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/login",
@@ -93,39 +101,30 @@ router.post(
 
 // PRIVATE ROUTES
 
-router.get("/private-page", ensureLogin.ensureLoggedIn(), (req, res, next) => {
+router.get("/private-page", isLoggedIn, (req, res, next) => {
   res.render("private", { user: req.user });
 });
 
 // GOOGLE ROUTES
 
 router.get(
-  "/auth/google",
+  "/auth/google", isLoggedOut,
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
 router.get(
-  "/auth/google/callback",
+  "/auth/google/callback", isLoggedOut,
   passport.authenticate("google", { failureRedirect: "/" }),
   function (req, res) {
-    console.log("=============");
-    console.log("successfully logged in with Google");
-    console.log("=============");
     res.redirect("/");
   }
 );
 
-// router.get('/newreview', (req, res, next) => {
-//     res.render('newreview', { user: req.user });
-//   });
-
 // Passport exposes a logout() function on req object that can be called from any route handler which needs to terminate a login session. We will declare the logout route in the auth-routes.js file as it follows:
 
-router.get("/logout", (req, res) => {
-  console.log("=============");
-  console.log("user logged out");
-  console.log("=============");
+router.get("/logout", isLoggedIn, (req, res) => {
   req.logout();
+  req.session.destroy();
   res.redirect("/");
 });
 
