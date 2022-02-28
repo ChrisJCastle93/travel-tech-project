@@ -1,15 +1,15 @@
 const { Schema, model } = require("mongoose");
 
 const companySchema = Schema({
-  profile: {
+  profile: new Schema({
     name: String,
     logo: String,
     intro: String,
     pricing: String,
-    types: String,
+    type: String,
     usp: [String],
-    website: String,
-  },
+    website: String
+  }),
   // admin: {
   //   type: Schema.Types.ObjectId,
   //   ref: "User",

@@ -22,7 +22,7 @@ const reviewSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
-  company: {
+  companyBeingReviewed: {
     type: Schema.Types.ObjectId,
     ref: "Company",
   },

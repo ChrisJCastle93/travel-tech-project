@@ -12,13 +12,6 @@ const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
 
 // SIGNUP
 
-// router.get("/login", (req, res, next) => {
-//   console.log('=================')
-//   console.log(req.session.id)
-//   console.log('=================')
-//   res.render("index")
-// });
-
 router.get("/signup", isLoggedOut, (req, res, next) =>
   res.render("auth/signup", { layout: false })
 );

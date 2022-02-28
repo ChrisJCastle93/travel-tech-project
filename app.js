@@ -210,11 +210,14 @@ app.locals.title = "TrustedTravelTech";
 const index = require("./routes/index");
 app.use("/", index);
 
-const router = require("./routes/auth-routes");
-app.use("/", router);
+const auth = require("./routes/auth-routes");
+app.use("/", auth);
 
 const reviews = require("./routes/review-routes");
 app.use("/reviews", reviews);
+
+const companies = require("./routes/company-routes");
+app.use("/companies", companies);
 
 app.use(function (req, res, next) {
   res.status(404).render("404");
