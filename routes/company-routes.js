@@ -4,6 +4,7 @@ const Review = require("../models/review");
 const User = require("../models/user");
 const Company = require("../models/company");
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
+const { averagesObject } = require("../public/javascripts/averages");
 
 /* READ */
 router.get("/", (req, res, next) => {
@@ -43,7 +44,7 @@ router.post("/new", (req, res, next) => {
     },
   })
     .then((companyFromDB) => {
-      console.log('Saved', companyFromDB.profile.name, 'to database');
+      console.log("Saved", companyFromDB.profile.name, "to database");
     })
     .catch((err) => console.log(err));
 });
@@ -51,7 +52,7 @@ router.post("/new", (req, res, next) => {
 // UPDATE
 router.post("/:id/edit", isLoggedIn, (req, res, next) => {
   const { id } = req.params;
-  const { overallScore, features, customerSupport, distribution, proBullets, conBullets, reviewTitle } = req.body;
+  const { overallScore, features, customerSupport, valueForMoney, easyToUse, distribution, proBullets, conBullets, reviewTitle } = req.body;
   Review.findOneAndUpdate(
     id,
     {
@@ -59,7 +60,9 @@ router.post("/:id/edit", isLoggedIn, (req, res, next) => {
         overallScore,
         features,
         customerSupport,
+        easyToUse, 
         distribution,
+        valueForMoney,
         proBullets,
         conBullets,
         reviewTitle,
@@ -89,19 +92,22 @@ router.post("/:id/delete", isLoggedIn, (req, res, next) => {
     });
 });
 
-
 // COMPANIES INDIVIDUAL PAGE
 
 /* GET Individual Review Page */
-router.get('/:id', (req, res, next) => {
-  console.log('ACCESSED ROUTE YA KNOW')
+router.get("/:id", (req, res, next) => {
   const { id } = req.params;
   Company.findById(id)
-  .then(company => {
-    console.log('rendering company profile')
-    res.render('company-profile', { user: req.user, company });
-  })
-  .catch(err => console.log(err))
+    .then((company) => {
+      return Review.find({ companyBeingReviewed: company }).sort("timestamp").populate("companyBeingReviewed");
+    })
+    .then((reviews) => {
+      console.log(averagesObject(reviews))
+      // in the below, reviews denotes the array of reviews attached to the company
+      // average review score is the averages object
+      res.render("companyprofile", { user: req.user, reviews, avarage: 3 });
+    })
+    .catch((err) => console.log(err));
 });
 
 module.exports = router;

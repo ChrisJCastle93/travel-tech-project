@@ -6,7 +6,9 @@
     "build:css": "postcss public/stylesheets/tailwind.css -o public/stylesheets/style.css",
     "start": "node ./bin/www",
     "dev": "DEBUG=starter-code:* nodemon ./bin/www",
-    "dev-windows": "nodemon ./bin/www"
+    "dev-windows": "nodemon ./bin/www",
+    "test": "jest",
+    "test:watch": "jest --watchAll"
   },
   "engines": {
     "node": "17.1.0"
@@ -14,6 +16,7 @@
   "dependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.0",
     "@tailwindcss/forms": "^0.4.0",
+    "axios": "^0.26.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.18.3",
     "connect-ensure-login": "^0.1.1",
@@ -25,6 +28,7 @@
     "express": "^4.16.3",
     "express-session": "^1.17.2",
     "hbs": "^4.0.1",
+    "jest": "^27.5.1",
     "jshint": "^2.13.2",
     "mongoose": "^5.2.10",
     "mongoose-findorcreate": "^3.0.0",

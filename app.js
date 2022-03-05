@@ -192,7 +192,12 @@ app.use(flash());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Express View engine setup
-
+hbs.registerHelper('times', function(n, block) {
+  var accum = '';
+  for(var i = 0; i < n; ++i)
+      accum += block.fn(i);
+  return accum;
+});
 // app.engine('handlebars', hbs.engine);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
