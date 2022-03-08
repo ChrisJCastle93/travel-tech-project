@@ -8,15 +8,15 @@ const companySchema = Schema({
     pricing: String,
     type: String,
     usp: [String],
-    website: String
+    website: String,
   }),
   // admin: {
   //   type: Schema.Types.ObjectId,
   //   ref: "User",
   // },
-    verified: {
+  verified: {
     type: Boolean,
-    default: false
+    default: false,
   },
   reviews: [
     {

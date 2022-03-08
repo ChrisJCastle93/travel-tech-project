@@ -15,6 +15,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const flash = require("connect-flash");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const seedDb = require('./db/seed')
 
 require("dotenv").config();
 
@@ -34,11 +35,13 @@ const Company = require("./models/company.js");
 // INITIALIZE EXPRESS
 
 const app = express();
+// seedDb();
 
 const clientP = mongoose
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false
   })
   .then((m) => {
     console.log(
@@ -112,21 +115,18 @@ passport.use(
       User.findOne({ email })
         .then((user) => {
           if (!user) {
-            console.log("USER NOT IN DB");
-            req.session.error = "USER NOT IN DB";
+            req.session.error = "Invalid Login Details";
             return done(null, false, {
               message: "That email is not registered",
             });
           }
           bcrypt.compare(password, user.password).then((result) => {
             if (result) {
-              console.log("PASSWORD MATCH");
               req.session.currentUser = user;
               req.session.success = "Successful Login";
               return done(null, user);
             } else {
-              console.log("PASSWROD INCORRECT");
-              req.session.error = "INCORRECT PASSWORD";
+              req.session.error = "Invalid Login Details";
               return done(null, false, {
                 message: "Password incorrect",
               });

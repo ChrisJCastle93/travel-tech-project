@@ -4,7 +4,7 @@ const Review = require("../models/review");
 const User = require("../models/user");
 const Company = require("../models/company");
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
-const { averagesObject } = require("../public/javascripts/averages");
+const { averagesObject, getOverallReviewScore } = require("../public/javascripts/averages");
 
 /* READ */
 router.get("/", (req, res, next) => {
@@ -13,24 +13,14 @@ router.get("/", (req, res, next) => {
     .catch((err) => console.log(err));
 });
 
-// router.get("/new", isLoggedIn, (req, res, next) => {
-//   res.render("reviews/newreview", { user: req.user });
-// });
-
-// CREATE
-// STILL NEED TO ATTRIBUTE TO COMPANY AND USER
-
-// router.post("/new", isLoggedIn, (req, res, next) => {
 router.post("/new", (req, res, next) => {
   const { name, logo, intro, pricing, type, usp, website } = req.body;
-  console.log(req.body);
-  // const id = req.user.id;
   if (!name || !logo || !intro || !pricing || !type || !usp || !website) {
     res.send("missing something");
-    // return res.render("reviews/newreview", {
-    //   user: req.user,
-    //   errorMessage: "Please complete all sections",
-    // });
+    return res.render("reviews/new", {
+      user: req.session.currentUser,
+      errorMessage: "Please complete all fields",
+    });
   }
   Company.create({
     profile: {
@@ -60,7 +50,7 @@ router.post("/:id/edit", isLoggedIn, (req, res, next) => {
         overallScore,
         features,
         customerSupport,
-        easyToUse, 
+        easyToUse,
         distribution,
         valueForMoney,
         proBullets,
@@ -97,15 +87,19 @@ router.post("/:id/delete", isLoggedIn, (req, res, next) => {
 /* GET Individual Review Page */
 router.get("/:id", (req, res, next) => {
   const { id } = req.params;
+  let comp;
   Company.findById(id)
     .then((company) => {
-      return Review.find({ companyBeingReviewed: company }).sort("timestamp").populate("companyBeingReviewed");
+      comp = company;
+      return Review.find({ companyBeingReviewed: company })
+        .sort("timestamp")
+        .populate([{ path: "companyBeingReviewed" }, { path: "owner" }]);
     })
     .then((reviews) => {
-      console.log(averagesObject(reviews))
-      // in the below, reviews denotes the array of reviews attached to the company
-      // average review score is the averages object
-      res.render("companyprofile", { user: req.user, reviews, avarage: 3 });
+      reviews.forEach(review => console.log(review.owner))
+      const averagesObj = averagesObject(reviews);
+      const overall = getOverallReviewScore(reviews);
+      res.render("companyprofile", { user: req.session.currentUser, reviews, averagesObj, noReviews: reviews.length, overall, comp });
     })
     .catch((err) => console.log(err));
 });

@@ -1,13 +1,11 @@
-const axios = require('axios')
+// const EventEmitter = require('events');
 
-// window.document.addEventListener(
-//   "DOMContentLoaded",
-//   () => {
-//     console.log('loaded')
-//   },
-//   false
-// );
+// class MyEmitter extends EventEmitter {
+//   foo() {
+//     this.emit('test');
+//   }
+// }
+// const myEmitter = new MyEmitter();
+// myEmitter.on('test', () => console.log('Yay, it works!'));
 
-
-
-
+// myEmitter.foo();

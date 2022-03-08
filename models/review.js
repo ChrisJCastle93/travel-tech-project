@@ -15,10 +15,6 @@ const contentSchema = new Schema({
 const reviewSchema = new Schema(
   {
     content: contentSchema,
-    // verified: {
-    //   type: Boolean,
-    //   default: false
-    // },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "User",

@@ -28,23 +28,24 @@ const internalCalcs = (reviews) => {
       .map((review) => {
         return review.content[key];
       });
+    // console.log(key, keyArray)
     if (keyArray.length == 0) {
       continue;
     }
     const keyAverage = keyArray.reduce((acc, value) => {
-      return (acc + value) / keyArray.length;
+      return (acc + value);
     }, 0);
     if (isNaN(keyAverage)) {
       continue;
     } else {
       keyArrayL++;
-      averages[key] = keyAverage;
+      averages[key] = Math.round(keyAverage/keyArray.length);
     }
   }
   const average =
-    Object.values(averages).reduce((acc, value) => {
+    Math.round(Object.values(averages).reduce((acc, value) => {
       return acc + value;
-    }) / keyArrayL;
+    }) / keyArrayL)
   return {
     average,
     averages,
@@ -52,10 +53,12 @@ const internalCalcs = (reviews) => {
 };
 
 const averagesObject = (reviews) => {
+  // console.log('averages object =====>', internalCalcs(reviews).averages)
   return internalCalcs(reviews).averages;
 };
 
 const getOverallReviewScore = (reviews) => {
+  // console.log('overall Review Score =====>', internalCalcs(reviews).average)
   return internalCalcs(reviews).average;
 };
 

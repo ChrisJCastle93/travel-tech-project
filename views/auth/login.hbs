@@ -9,19 +9,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>{{title}}</title>
     {{! <link rel="stylesheet" href="/stylesheets/style.css" /> }}
-    <link rel="stylesheet" href="/stylesheets/tailwind.css" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
 
   </head>
   <body>
 
-    <section>
+    <section class="px-2 md:px-0">
       <div class="flex min-h-screen overflow-hidden">
         <div
           class="flex flex-col justify-center flex-1 px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24"
         >
           <div class="w-full max-w-xl mx-auto lg:w-96">
             <div>
-              <a href="/" class="text-blue-600 text-medium">wickedblocks</a>
+              <a href="/" class="text-blue-600 text-medium">TrustedTravelTech</a>
               <h2 class="mt-6 text-3xl font-extrabold text-neutral-600">
                 Login.
               </h2>
@@ -72,7 +72,6 @@
                         required=""
                         placeholder="Your Email"
                         class="block w-full px-5 py-3 text-base placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
-                        value="chris@gmail.com"
                       />
                     </div>
                   </div>
@@ -84,7 +83,6 @@
                     <div class="mt-1">
                       <input
                         id="password"
-                        value=".Dougal22"
                         name="password"
                         type="password"
                         autocomplete="current-password"
@@ -95,7 +93,7 @@
                     </div>
                   </div>
                   <div class="flex items-center justify-between">
-                    <div class="flex items-center">
+                    {{!-- <div class="flex items-center">
                       <input
                         id="remember-me"
                         name="remember-me"
@@ -107,12 +105,12 @@
                         for="remember-me"
                         class="block ml-2 text-sm text-neutral-600"
                       > Remember me </label>
-                    </div>
+                    </div> --}}
                     <div class="text-sm">
                       <a
-                        href="#"
+                        href="/signup"
                         class="font-medium text-blue-600 hover:text-blue-500"
-                      > Forgot your password? </a>
+                      > Sign Up </a>
                     </div>
                   </div>
                   <div>

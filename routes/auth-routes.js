@@ -53,6 +53,7 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
       })
         .then((user) => {
           console.log("new user created ", user.email);
+          req.session.currentUser = user;
           res.redirect("/");
         })
         .catch((err) => next(err));
@@ -95,7 +96,7 @@ router.post(
 // PRIVATE ROUTES
 
 router.get("/private-page", isLoggedIn, (req, res, next) => {
-  res.render("private", { user: req.user });
+  res.render("private", { user: req.session.currentUser });
 });
 
 // GOOGLE ROUTES

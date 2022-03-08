@@ -8,9 +8,8 @@ const ratingModule1 = require("../public/javascripts/script");
 
 /* READ */
 router.get("/new", isLoggedIn, (req, res, next) => {
-  Company.find()
-  .then(companies => {
-    res.render("reviews/newreview", { user: req.user, companies });
+  Company.find().then((companies) => {
+    res.render("reviews/newreview", { user: req.session.currentUser, companies, layout: false });
   });
 });
 
@@ -24,19 +23,26 @@ router.get("/", (req, res, next) => {
 // STILL NEED TO ATTRIBUTE TO COMPANY AND USER
 
 router.post("/new", isLoggedIn, (req, res, next) => {
-  const { companyBeingReviewed, overallScore, features, customerSupport, distribution, proBullets, conBullets, reviewTitle } = req.body;
-  const id = req.user.id;
-  console.log(companyBeingReviewed, "<-- company being reviewed");
-  if (!overallScore || !features || !customerSupport || !distribution || !proBullets || !conBullets || !reviewTitle || !companyBeingReviewed) {
+  console.log(req.body.companyName, '<=== req.body.comp')
+  const { companyBeingReviewed, overallScore, features, customerSupport, valueForMoney, easyToUse, distribution, proBullets, conBullets, reviewTitle } = req.body;
+  const { _id} = req.session.currentUser;
+  if (!overallScore || !features || !customerSupport || !distribution || !valueForMoney || !easyToUse || !proBullets || !conBullets || !reviewTitle || !companyBeingReviewed) {
     return res.render("reviews/newreview", {
-      user: req.user,
+      user: req.session.currentUser,
       errorMessage: "Please complete all sections",
     });
   }
+  if(req.body.companyName) {
+    console.log('req.body.com exists')
+    User.findByIdAndUpdate(_id, { companyName: req.body.companyName }, { new: true})
+    .then(userInDb => console.log(userInDb))
+    .catch(err => console.log(err))
+  }
   Review.create({
-    owner: id,
     content: {
       overallScore,
+      easyToUse,
+      valueForMoney,
       features,
       customerSupport,
       distribution,
@@ -44,11 +50,17 @@ router.post("/new", isLoggedIn, (req, res, next) => {
       conBullets,
       reviewTitle,
     },
-    companyBeingReviewed,
+    owner: _id,
+    companyBeingReviewed: companyBeingReviewed
   })
     .then((reviewFromDB) => {
-      return Company.findByIdAndUpdate(companyBeingReviewed, { $push: { reviews: reviewFromDB._id } }, { new: true});
-    }).then(company => res.send(company))
+      console.log('===ADDED REVIEW====')
+      return Company.findByIdAndUpdate(companyBeingReviewed, { $push: { reviews: reviewFromDB._id } }, { new: true });
+    })
+    .then((company) => {
+      req.session.success = "Successfully left review";
+      res.redirect("/");
+    })
     .catch((err) => console.log(err));
 });
 
@@ -72,7 +84,6 @@ router.post("/:id/edit", isLoggedIn, (req, res, next) => {
     { new: true }
   )
     .then((reviewFromDB) => {
-      console.log(reviewFromDB.id, "updated");
       res.redirect("/"); // could change to user profile, need to pass in success message somehow.
     })
     .catch((err) => console.log(err));
@@ -80,11 +91,9 @@ router.post("/:id/edit", isLoggedIn, (req, res, next) => {
 
 // DELETE
 router.post("/:id/delete", isLoggedIn, (req, res, next) => {
-  console.log("accessed delete route");
   const { id } = req.params;
   Review.findOneAndDelete(id)
     .then((deletedUser) => {
-      console.log("Deleted user:", deletedUser.email);
       res.redirect("/"); // could change to user profile, need to pass in success message somehow.
     })
     .catch((err) => {
