@@ -11,7 +11,6 @@
           <h1 class="max-w-5xl text-2xl font-bold leading-none tracking-tighter text-neutral-600 md:text-5xl lg:text-5xl lg:max-w-7xl">
             Real <span class="text-blue-600"> res tech </span> reviews from the operators that use them. 
           </h1>
-                    {{!-- <p class="max-w-xl mx-auto mt-8 text-base leading-relaxed text-gray-500">No sales pitches. No fluff.</u></a></p> --}}
           <div class="flex items-center justify-center">
           <img class="w-3/4 max-w-2xl mt-8 lg:mt-12" src="images/home.svg"></img>
           </div>
@@ -25,16 +24,6 @@
             </div>
           </form> --}}
           <p class="max-w-xl mx-auto mt-8 text-base leading-relaxed text-gray-500">Help the community by <a href="/reviews/new"><u>leaving a review.</u></a></p>
-          {{! <div class="lg:max-w-lg lg:flex lg:mx-auto">
-            <p class="mt-3 text-xs text-gray-500">
-              By subscribing, you agree with Revue’s
-              <a target="_blank" href="https://www.getrevue.co/terms">Terms of
-                Service</a>
-              and
-              <a target="_blank" href="https://www.getrevue.co/privacy">Privacy
-                Policy</a>.
-            </p>
-          </div> }}
         </div>
       </div>
     </div>
@@ -42,8 +31,27 @@
 </section>
 <div>
   <div class="container px-8 mx-auto">
+    <div class="px-5 rounded-lg bg-gray-50 py-5 lg:max-w-5xl mx-auto overflow-x-auto whitespace-nowrap">
+<span id="featureEasy" class="box-border bg-gray-100 text-gray-800 text-md font-medium inline-flex items-center px-5 py-1 mb-1 rounded-full mr-2">
+🙌  EASY TO USE
+</span>
+<span id="featureFeature" class="bg-gray-100 text-gray-800 text-md font-medium inline-flex items-center px-5 py-1 rounded-full mr-2">
+✔️  PACKED WITH FEATURES
+</span>
+<span id="featureSupport" class="bg-gray-100 text-gray-800 text-md font-medium inline-flex items-center px-5 py-1 rounded-full mr-2">
+💁  SUPERSTAR SUPPORT
+</span>
+<span id="featureValue" class="bg-gray-100 text-gray-800 text-md font-medium inline-flex items-center px-5 py-1 rounded-full mr-2">
+🤑  GREAT VALUE
+</span>
+<span id="featureDistribution" class="bg-gray-100 text-gray-800 text-md font-medium inline-flex items-center px-5 py-1 rounded-full mr-2 ">
+🔌  STRONG DISTRIBUTION
+</span>
+    </div>
+    <br>
+<div id="companiesContainer">
     {{#each companies}}
-    <div class="flex flex-col mt-4 lg:flex-row justify-center bg-white rounded-xl border mx-auto shadow-xl lg:max-w-5xl">
+    <div data-easy="{{this.averages.easyToUse}}" data-features="{{this.averages.features}}" data-customerSupport="{{this.averages.customerSupport}}" data-valueForMoney="{{this.averages.valueForMoney}}" data-distribution="{{this.averages.distribution}}"  class="flex flex-col mt-4 lg:flex-row justify-center bg-white rounded-xl border mx-auto shadow-xl lg:max-w-5xl companyDOM">
       <div class="relative flex align-middle justify-center">
         <span class="absolute -top-2.5 -left-2.5 bg-blue-100 text-blue-800 md:text-5xl text-2xl font-bold px-2.5 py-2.5 rounded dark:bg-blue-200 dark:text-blue-800">#{{this.index}}</span>
         <img class="object-contain w-1/2 lg:w-48 lg:px-8 px-0 py-8" src="{{this.profile.logo}}" alt="" srcset="" />
@@ -72,7 +80,9 @@
           </div>
         </div>
         <div class="flex flex-col justify-between lg:py-8 lg:w-1/3 w-full mx-auto py-0 pb-8 px-4 lg:border-l leading-normal">
+            {{#if this.overall}}
           <div class="flex w-full items-center justify-center mb-3">
+
                           {{#times this.overall }}
 
             <svg class="w-10 h-10 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
@@ -98,7 +108,7 @@
               <span class="max-w-xl mx-auto mt-8 text-sm leading-relaxed text-gray-500">Features</span>
             </div>
             <div class="flex items-center">
-              {{#times this.averages.easyToUse }}
+              {{#times this.averages.features }}
               <svg class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
               {{/times}}
             </div>
@@ -138,8 +148,17 @@
           <div class="flex justify-between mt-3">
             <a href="/companies/{{this.id}}" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">See all reviews</a>
           </div>
+          {{else}}
+          <div class="flex-col flex mx-auto items-center justify-center mb-3">
+              <p class="max-w-xl mx-auto mt-8 text-base leading-relaxed italic text-gray-500 text-center">No reviews yet.</p>
+              <br>
+              <a href="reviews/new" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Leave a Review</a>
+          </div>
+
+          {{/if}}
         </div>
       </div>
+    </div>
     </div>
   </div>
   {{/each}}
