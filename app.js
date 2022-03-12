@@ -91,12 +91,16 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser((user, cb) => {
+  // console.log('SERIALIZING USER', user)
   cb(null, user.id);
 });
 
 passport.deserializeUser((id, cb) => {
   User.findById(id)
-    .then((user) => cb(null, user))
+    .then((user) => {
+      // console.log('DESERIALIZING USER', user)
+      cb(null, user)
+    })
     .catch((error) => cb(error));
 });
 
@@ -137,28 +141,29 @@ passport.use(
   )
 );
 
-
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.googleClientId,
       clientSecret: process.env.googleSecret,
       callbackURL: "/auth/google/callback",
-      passReqToCallback: true
+      passReqToCallback: true,
     },
     function (req, accessToken, refreshToken, profile, cb) {
       User.findOrCreate(
         {
-          googleId: profile.id,
+          // googleId: profile.id,
           email: profile.emails[0].value,
           firstName: profile.name.givenName,
           lastName: profile.name.familyName,
         },
         function (err, user) {
+          // user.firstName
           req.session.currentUser = user;
           return cb(err, user);
         }
-      );
+      )
+      // User.findOneAndUpdate( { email: profile.emails[0].value }, { firstName: 'John' })
     }
   )
 );

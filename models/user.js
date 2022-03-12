@@ -12,6 +12,7 @@ const userSchema = new Schema(
     googleId: {type: String},
     email: {
       type: String,
+      sparse: true,
       required: [true, 'Email is required.'],
       match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address.'],
       unique: true,

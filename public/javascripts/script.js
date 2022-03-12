@@ -4753,7 +4753,7 @@ const filteredDomains = [
   "zzom.co.uk",
   "zzz.com",
   "zzz.pl",
-]
+];
 
 function professionalEmailOnly(e) {
   const email = document.getElementById("email").value;

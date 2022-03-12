@@ -8,33 +8,27 @@ const bcrypt = require("bcrypt");
 const bcryptSalt = 10;
 const ensureLogin = require("connect-ensure-login");
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
-const filteredDomains = require('../utils/filteredDomains');
+const filteredDomains = require("../utils/filteredDomains");
 
 // SIGNUP
 
-router.get("/signup", isLoggedOut, (req, res, next) =>
-  res.render("auth/signup", { layout: false })
-);
+router.get("/signup", isLoggedOut, (req, res, next) => res.render("auth/signup", { layout: false }));
 
 router.post("/signup", isLoggedOut, (req, res, next) => {
   const { firstName, lastName, email, password, companyName } = req.body;
   const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
   if (!regex.test(password)) {
-    res
-      .status(500)
-      .render('auth/signup', { layout: false, errorMessage: 'Password needs to have at least 6 chars and must contain at least one number, one lowercase and one uppercase letter.' });
+    res.status(500).render("auth/signup", { layout: false, errorMessage: "Password needs to have at least 6 chars and must contain at least one number, one lowercase and one uppercase letter." });
     return;
   }
   if (filteredDomains.indexOf(email.split("@")[1]) !== -1) {
-    res
-      .status(500)
-      .render('auth/signup', { layout: false, errorMessage: 'Email needs to be a professional email address.' });
+    res.status(500).render("auth/signup", { layout: false, errorMessage: "Email needs to be a professional email address." });
     return;
   }
   if (!email || !password) {
     console.log("USERNAME OR PASSWORD MISSING");
     res.render("auth/signup", {
-      layout: false, 
+      layout: false,
       errorMessage: "Indicate username and password",
     });
     return;
@@ -44,7 +38,7 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
       if (user !== null) {
         console.log("USERNAME ALREADY EXISTS IN DB");
         res.render("auth/signup", {
-          layout: false, 
+          layout: false,
           errorMessage: "There's already an account registered with this email",
         });
         return;
@@ -73,8 +67,7 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
       } else if (error.code === 11000) {
         console.log("FAILED SERVER SIDE VALIDATION - NOT UNIQUE");
         res.status(500).render("auth/signup", {
-          errorMessage:
-            "Username and email need to be unique. Either username or email is already used.",
+          errorMessage: "Username and email need to be unique. Either username or email is already used.",
         });
       } else {
         next(err);
@@ -91,7 +84,8 @@ router.get("/login", isLoggedOut, (req, res, next) => {
 });
 
 router.post(
-  "/login", isLoggedOut, 
+  "/login",
+  isLoggedOut,
   passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/login",
@@ -107,18 +101,11 @@ router.get("/private-page", isLoggedIn, (req, res, next) => {
 
 // GOOGLE ROUTES
 
-router.get(
-  "/auth/google", isLoggedOut,
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-);
+router.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
-router.get(
-  "/auth/google/callback", isLoggedOut,
-  passport.authenticate("google", { failureRedirect: "/" }),
-  function (req, res) {
-    res.redirect("/");
-  }
-);
+router.get("/auth/google/callback", passport.authenticate("google", { failureRedirect: '/auth/google/failure' }), function (req, res) {
+  res.redirect("/");
+});
 
 // Passport exposes a logout() function on req object that can be called from any route handler which needs to terminate a login session. We will declare the logout route in the auth-routes.js file as it follows:
 

@@ -23,7 +23,7 @@ router.get("/", (req, res, next) => {
 // STILL NEED TO ATTRIBUTE TO COMPANY AND USER
 
 router.post("/new", isLoggedIn, (req, res, next) => {
-  console.log(req.body.companyName, '<=== req.body.comp')
+  console.log(req.body.companyName, '<=== req.body.comp');
   const { companyBeingReviewed, overallScore, features, customerSupport, valueForMoney, easyToUse, distribution, proBullets, conBullets, reviewTitle } = req.body;
   const { _id} = req.session.currentUser;
   if (!overallScore || !features || !customerSupport || !distribution || !valueForMoney || !easyToUse || !proBullets || !conBullets || !reviewTitle || !companyBeingReviewed) {
@@ -33,10 +33,10 @@ router.post("/new", isLoggedIn, (req, res, next) => {
     });
   }
   if(req.body.companyName) {
-    console.log('req.body.com exists')
+    console.log('req.body.com exists');
     User.findByIdAndUpdate(_id, { companyName: req.body.companyName }, { new: true})
     .then(userInDb => console.log(userInDb))
-    .catch(err => console.log(err))
+    .catch(err => console.log(err));
   }
   Review.create({
     content: {
@@ -54,7 +54,7 @@ router.post("/new", isLoggedIn, (req, res, next) => {
     companyBeingReviewed: companyBeingReviewed
   })
     .then((reviewFromDB) => {
-      console.log('===ADDED REVIEW====')
+      console.log('===ADDED REVIEW====');
       return Company.findByIdAndUpdate(companyBeingReviewed, { $push: { reviews: reviewFromDB._id } }, { new: true });
     })
     .then((company) => {
