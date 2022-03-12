@@ -63,7 +63,7 @@ app.use(
     },
     store: MongoStore.create({
       clientPromise: clientP,
-      dbName: "myFirstDatabase",
+      dbName: "prod",
       stringify: false,
       autoRemove: "interval",
       autoRemoveInterval: 1,

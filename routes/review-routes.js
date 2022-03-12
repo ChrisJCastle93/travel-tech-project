@@ -4,7 +4,7 @@ const Review = require("../models/review");
 const User = require("../models/user");
 const Company = require("../models/company");
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
-const ratingModule1 = require("../public/javascripts/script");
+// const ratingModule1 = require("../public/javascripts/script");
 
 /* READ */
 router.get("/new", isLoggedIn, (req, res, next) => {

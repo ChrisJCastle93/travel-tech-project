@@ -4753,29 +4753,6 @@ const filteredDomains = [
   "zzom.co.uk",
   "zzz.com",
   "zzz.pl",
-]
+];
 
-function professionalEmailOnly(e) {
-  const email = document.getElementById("email").value;
-  if (filteredDomains.indexOf(email.split("@")[1]) !== -1) {
-    document.getElementById("emailError").classList.remove("invisible", "h-0");
-    document.getElementById("emailError").classList.add("pt-2");
-  } else {
-    document.getElementById("emailError").classList.add("invisible", "h-0");
-    document.getElementById("passwordError").classList.remove("pt-2");
-  }
-}
-
-function passwordPass(e) {
-  const password = document.getElementById("password").value;
-  const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
-  if (password.length > 4) {
-    if (!regex.test(password)) {
-      document.getElementById("passwordError").classList.remove("invisible", "h-0");
-      document.getElementById("passwordError").classList.add("pt-2");
-    } else {
-      document.getElementById("passwordError").classList.add("invisible", "h-0");
-      document.getElementById("passwordError").classList.remove("pt-2");
-    }
-  }
-}
+module.exports = filteredDomains;

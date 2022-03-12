@@ -4,11 +4,11 @@ const { Router } = require("express");
 const router = new Router();
 const passport = require("passport");
 const User = require("../models/user");
-// const Room = require("../models/room");
-const bcrypt = require("bcrypt"); // secures passwords. We specified a hash of 10 characters here.
+const bcrypt = require("bcrypt");
 const bcryptSalt = 10;
 const ensureLogin = require("connect-ensure-login");
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
+const filteredDomains = require('../utils/filteredDomains');
 
 // SIGNUP
 
@@ -25,9 +25,16 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
       .render('auth/signup', { layout: false, errorMessage: 'Password needs to have at least 6 chars and must contain at least one number, one lowercase and one uppercase letter.' });
     return;
   }
+  if (filteredDomains.indexOf(email.split("@")[1]) !== -1) {
+    res
+      .status(500)
+      .render('auth/signup', { layout: false, errorMessage: 'Email needs to be a professional email address.' });
+    return;
+  }
   if (!email || !password) {
     console.log("USERNAME OR PASSWORD MISSING");
     res.render("auth/signup", {
+      layout: false, 
       errorMessage: "Indicate username and password",
     });
     return;
@@ -37,7 +44,8 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
       if (user !== null) {
         console.log("USERNAME ALREADY EXISTS IN DB");
         res.render("auth/signup", {
-          errorMessage: "The username already exists",
+          layout: false, 
+          errorMessage: "There's already an account registered with this email",
         });
         return;
       }

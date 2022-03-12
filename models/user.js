@@ -19,10 +19,6 @@ const userSchema = new Schema(
       trim: true
     },
     companyName: String,
-    // adminCompany: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: 'Company'
-    // },
     reviews: [{
       type: Schema.Types.ObjectId,
       ref: 'Review'
