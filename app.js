@@ -15,16 +15,14 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const flash = require("connect-flash");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const seedDb = require('./db/seed')
+const seedDb = require("./db/seed");
 
 require("dotenv").config();
 
 // MONGOOSE SETUP
 
 const app_name = require("./package.json").name;
-const debug = require("debug")(
-  `${app_name}:${path.basename(__filename).split(".")[0]}`
-);
+const debug = require("debug")(`${app_name}:${path.basename(__filename).split(".")[0]}`);
 
 // MODEL SETUP
 
@@ -35,18 +33,16 @@ const Company = require("./models/company.js");
 // INITIALIZE EXPRESS
 
 const app = express();
-// seedDb();
+seedDb();
 
 const clientP = mongoose
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false
+    useFindAndModify: false,
   })
   .then((m) => {
-    console.log(
-      `Connected to Mongo! Database name: "${m.connections[0].name}"`
-    );
+    console.log(`Connected to Mongo! Database name: "${m.connections[0].name}"`);
     return m.connection.getClient();
   })
   .catch((err) => {
@@ -141,21 +137,6 @@ passport.use(
   )
 );
 
-// passport.use(
-//   new GoogleStrategy(
-//     {
-//       clientID: process.env.googleClientId,
-//       clientSecret: process.env.googleSecret,
-//       callbackURL: "/auth/google/callback",
-//       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
-//     },
-//     function (accessToken, refreshToken, profile, cb) {
-//       User.findOrCreate({googleId: profile.id}, function (err, user) {
-//         return cb(err, user);
-//       });
-//     }
-//   )
-// );
 
 passport.use(
   new GoogleStrategy(
@@ -192,10 +173,9 @@ app.use(flash());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Express View engine setup
-hbs.registerHelper('times', function(n, block) {
-  var accum = '';
-  for(var i = 0; i < n; ++i)
-      accum += block.fn(i);
+hbs.registerHelper("times", function (n, block) {
+  var accum = "";
+  for (var i = 0; i < n; ++i) accum += block.fn(i);
   return accum;
 });
 // app.engine('handlebars', hbs.engine);

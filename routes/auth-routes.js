@@ -79,8 +79,6 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
 // LOGIN ROUTES
 
 router.get("/login", isLoggedOut, (req, res, next) => {
-  // res.locals.message = req.flash("message");
-  // console.log(res.locals);
   res.render("auth/login", { layout: false });
 });
 
