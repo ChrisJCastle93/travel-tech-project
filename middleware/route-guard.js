@@ -13,7 +13,7 @@ const isLoggedIn = (req, res, next) => {
 const isLoggedOut = (req, res, next) => {
   console.log('== isLoggedOut - REQ.SESSION.CURRENTUSER ==>', req.session.currentUser);
   if (req.session.currentUser) {
-    console.log('not logged out')
+    console.log('not logged out');
     return res.redirect('/');
   }
   next();

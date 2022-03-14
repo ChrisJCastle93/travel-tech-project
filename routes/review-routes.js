@@ -23,6 +23,7 @@ router.get("/", (req, res, next) => {
 // STILL NEED TO ATTRIBUTE TO COMPANY AND USER
 
 router.post("/new", isLoggedIn, (req, res, next) => {
+  let rev;
   const { companyBeingReviewed, overallScore, features, customerSupport, valueForMoney, easyToUse, distribution, proBullets, conBullets, reviewTitle } = req.body;
   const { _id} = req.session.currentUser;
   if (!overallScore || !features || !customerSupport || !distribution || !valueForMoney || !easyToUse || !proBullets || !conBullets || !reviewTitle || !companyBeingReviewed) {
@@ -52,13 +53,13 @@ router.post("/new", isLoggedIn, (req, res, next) => {
     companyBeingReviewed: companyBeingReviewed
   })
     .then((reviewFromDB) => {
-      console.log(reviewFromDB.companyBeingReviewed)
-      sendTweet(reviewFromDB.content.reviewTitle, reviewFromDB.companyBeingReviewed);
+      rev = reviewFromDB;
       return Company.findByIdAndUpdate(companyBeingReviewed, { $push: { reviews: reviewFromDB._id } }, { new: true });
     })
     .then((company) => {
+      // sendTweet(rev, company);
       req.session.success = "Successfully left review";
-      res.redirect("/");
+      res.redirect(`/companies/${company.id}`);
     })
     .catch((err) => console.log(err));
 });

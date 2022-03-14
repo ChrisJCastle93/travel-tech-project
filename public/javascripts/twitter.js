@@ -6,10 +6,12 @@ const client = new TwitterApi({
   accessSecret: process.env.twitter_token_secret,
 });
 
-const sendTweet = (title, id) => {
-  client.v2.tweet(`"${title}"
+const sendTweet = (review, company) => {
+  client.v2.tweet(`New review posted about: ${company.profile.name}
+  
+  "${review.content.reviewTitle}"
 
-  http://www.trustedtraveltech.com/companies/${id}`
+  http://www.trustedtraveltech.com/companies/${company.id}`
   ).then((response) => console.log(response));
 };
 
