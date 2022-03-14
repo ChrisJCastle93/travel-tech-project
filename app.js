@@ -33,7 +33,7 @@ const Company = require("./models/company.js");
 // INITIALIZE EXPRESS
 
 const app = express();
-seedDb();
+// seedDb();
 
 const clientP = mongoose
   .connect(process.env.MONGODB_URI, {
@@ -99,7 +99,7 @@ passport.deserializeUser((id, cb) => {
   User.findById(id)
     .then((user) => {
       // console.log('DESERIALIZING USER', user)
-      cb(null, user)
+      cb(null, user);
     })
     .catch((error) => cb(error));
 });
@@ -162,7 +162,7 @@ passport.use(
           req.session.currentUser = user;
           return cb(err, user);
         }
-      )
+      );
       // User.findOneAndUpdate( { email: profile.emails[0].value }, { firstName: 'John' })
     }
   )

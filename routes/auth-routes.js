@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 const bcryptSalt = 10;
 const ensureLogin = require("connect-ensure-login");
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
-const filteredDomains = require("../utils/filteredDomains");
+const filteredDomains = require("../public/javascripts/filteredDomains");
 
 // SIGNUP
 
