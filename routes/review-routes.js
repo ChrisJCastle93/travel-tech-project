@@ -6,8 +6,6 @@ const Company = require("../models/company");
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
 const sendTweet = require('../public/javascripts/twitter');
 
-// sendTweet();
-
 /* READ */
 router.get("/new", isLoggedIn, (req, res, next) => {
   Company.find().then((companies) => {
@@ -25,14 +23,12 @@ router.get("/", (req, res, next) => {
 // STILL NEED TO ATTRIBUTE TO COMPANY AND USER
 
 router.post("/new", isLoggedIn, (req, res, next) => {
-  console.log(req.body.companyName, '<=== req.body.comp');
   const { companyBeingReviewed, overallScore, features, customerSupport, valueForMoney, easyToUse, distribution, proBullets, conBullets, reviewTitle } = req.body;
   const { _id} = req.session.currentUser;
   if (!overallScore || !features || !customerSupport || !distribution || !valueForMoney || !easyToUse || !proBullets || !conBullets || !reviewTitle || !companyBeingReviewed) {
-    return res.render("reviews/newreview", {
-      user: req.session.currentUser,
-      errorMessage: "Please complete all sections",
-    });
+      Company.find().then((companies) => {
+        return res.render("reviews/newreview", { user: req.session.currentUser, errorMessage: "Please complete all sections", companies, layout: false });
+      });
   }
   if(req.body.companyName) {
     console.log('req.body.com exists');
@@ -56,7 +52,8 @@ router.post("/new", isLoggedIn, (req, res, next) => {
     companyBeingReviewed: companyBeingReviewed
   })
     .then((reviewFromDB) => {
-      console.log('===ADDED REVIEW====');
+      console.log(reviewFromDB.companyBeingReviewed)
+      sendTweet(reviewFromDB.content.reviewTitle, reviewFromDB.companyBeingReviewed);
       return Company.findByIdAndUpdate(companyBeingReviewed, { $push: { reviews: reviewFromDB._id } }, { new: true });
     })
     .then((company) => {
