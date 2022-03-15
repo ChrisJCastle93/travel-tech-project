@@ -16,6 +16,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const flash = require("connect-flash");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const seedDb = require("./db/seed");
+const createCompanies = require("./db/seedCos");
 
 require("dotenv").config();
 
@@ -33,6 +34,7 @@ const Company = require("./models/company.js");
 // INITIALIZE EXPRESS
 
 const app = express();
+// createCompanies();
 // seedDb();
 
 const clientP = mongoose
@@ -48,6 +50,7 @@ const clientP = mongoose
   .catch((err) => {
     console.error("Error connecting to mongo", err);
   });
+
 
 mongoose.set("useCreateIndex", true);
 

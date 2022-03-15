@@ -21,7 +21,7 @@ const seedDb = () => {
         email: "chrisjcastle93@gmail.com",
         companyName: "Urban Adventures",
         password: "$2b$10$BDYdLC8AfS6vvYOr7Xuj/egqfIJpztpSAkS8a1I2RN5JhGP6V8j8y",
-      })
+      });
     })
     .then((userInDb) => {
       userReviewer = userInDb.id;
