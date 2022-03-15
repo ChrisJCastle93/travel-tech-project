@@ -1,36 +1,46 @@
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>{{title}}</title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
-  </head>
-  <body>
-<section class="text-blueGray-700 flex justify-center">
-  <div class="container items-center px-5 py-6 lg:px-20">
-    <div class="flex flex-col w-full max-w-lg px-0 mx-auto my-0 transition duration-500 ease-in-out transform bg-white rounded-lg md:mt-0">
-      <h1 class="text-center max-w-5xl mt-8 text-2xl font-bold leading-none tracking-tighter text-neutral-600 md:text-5xl lg:text-6xl lg:max-w-7xl">
-        Leave a review.
-      </h1>
-      <div class="mt-8">
-        <div class="">
-          <form action="/reviews/new" method="POST" id="form-container">
-            {{#if errorMessage}}
-              <div class="error-message">{{errorMessage}}</div>
-            {{/if}}
-            {{#if user.companyName}}
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>{{title}}</title>
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+</head>
+
+<body>
+  <section class="text-blueGray-700 flex justify-center">
+    <div class="container items-center px-5 py-6 lg:px-20">
+      <div
+        class="flex flex-col w-full max-w-lg px-0 mx-auto my-0 transition duration-500 ease-in-out transform bg-white rounded-lg md:mt-0">
+        <h1
+          class="text-center max-w-5xl mt-8 text-2xl font-bold leading-none tracking-tighter text-neutral-600 md:text-5xl lg:text-6xl lg:max-w-7xl">
+          Leave a review.
+        </h1>
+        <div class="mt-8">
+          <div class="">
+            <form action="/reviews/new" method="POST" id="form-container">
+              {{#if errorMessage}}
+              <div
+                class="p-4 mb-4 mt-8 text-sm text-center text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800 error-message"
+                role="alert">{{errorMessage}}</div>
+              {{/if}}
+              {{#if user.companyName}}
               {{!-- <p class="max-w-xl mx-auto text-xl text-center font-medium leading-relaxed text-gray-600"> You're leaving a review as {{user.firstName}} of {{user.companyName}} </p> --}}
-            {{else}}
+              {{else}}
               <div>
-                <p class="text-center max-w-xl mx-auto mt-8 text-base leading-relaxed text-gray-500">What is the name of your company?</p>
+                <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">What is the name of
+                  your company?</p>
                 <div class="mt-1">
-                  <input id="companyName" name="companyName" type="text" placeholder="Company Name" class="block w-full px-5 py-3 text-center text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300" />
+                  <input id="companyName" name="companyName" type="text" placeholder="Company Name"
+                    class="block w-full px-5 py-3 text-center text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300" />
                 </div>
               </div>
-            {{/if}}
-                <p class="text-center max-w-xl mx-auto mt-8 text-base leading-relaxed text-gray-500">Which company is your review about?</p>
-            <select name="companyBeingReviewed" class="form-select appearance-none
+              {{/if}}
+              <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">Which company is your
+                review about?</p>
+              <select name="companyBeingReviewed"
+                class="form-select appearance-none
       block
       w-full
       px-5
@@ -44,108 +54,115 @@
       transition
       ease-in-out
       m-0
-      bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300" aria-label="Default select example">
-        <option disabled="disabled" selected="selected" class="text-center text-neutral-600"
-       selected>V</option>
-                   {{#each companies}}
-            <p>        <option value="{{this._id}}">{{this.profile.name}}</option></p>
-            {{/each}}
-    </select>
+      bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
+                aria-label="Default select example">
+                <option disabled="disabled" selected="selected" class="text-center text-neutral-600" selected>V</option>
+                {{#each companies}}
+                <p>
+                  <option value="{{this._id}}">{{this.profile.name}}</option>
+                </p>
+                {{/each}}
+              </select>
 
-  </div>
-</div>
+          </div>
+        </div>
 
 
-            <p class="text-center max-w-xl mx-auto mt-4 text-base leading-relaxed text-gray-500">How would you rate your system overall?</p>
-            <div class="rating">
-              <input id="star1.5" name="overallScore" type="radio" value="5" class="radio-btn hide" />
-              <label for="star1.5">&#9733</label>
-              <input id="star1.4" name="overallScore" type="radio" value="4" class="radio-btn hide" />
-              <label for="star1.4">&#9733</label>
-              <input id="star1.3" name="overallScore" type="radio" value="3" class="radio-btn hide" />
-              <label for="star1.3">&#9733</label>
-              <input id="star1.2" name="overallScore" type="radio" value="2" class="radio-btn hide" />
-              <label for="star1.2">&#9733</label>
-              <input id="star1.1" name="overallScore" type="radio" value="1" class="radio-btn hide" />
-              <label for="star1.1">&#9733</label>
-              <div class="clear"></div>
-            </div>
-            <p class="text-center max-w-xl mx-auto mt-8 text-base leading-relaxed text-gray-500">How would you rate the features?</p>
-            <div class="rating">
-              <input id="star2.5" name="features" type="radio" value="5" class="radio-btn hide" />
-              <label for="star2.5">&#9733</label>
-              <input id="star2.4" name="features" type="radio" value="4" class="radio-btn hide" />
-              <label for="star2.4">&#9733</label>
-              <input id="star2.3" name="features" type="radio" value="3" class="radio-btn hide" />
-              <label for="star2.3">&#9733</label>
-              <input id="star2.2" name="features" type="radio" value="2" class="radio-btn hide" />
-              <label for="star2.2">&#9733</label>
-              <input id="star2.1" name="features" type="radio" value="1" class="radio-btn hide" />
-              <label for="star2.1">&#9733</label>
-              <div class="clear"></div>
-            </div>
+        <p class="text-center max-w-xl mx-auto mt-4 text-xl leading-relaxed text-gray-500">How would you rate your
+          system overall?</p>
+        <div class="rating">
+          <input id="star1.5" name="overallScore" type="radio" value="5" class="radio-btn hide" />
+          <label for="star1.5">&#9733</label>
+          <input id="star1.4" name="overallScore" type="radio" value="4" class="radio-btn hide" />
+          <label for="star1.4">&#9733</label>
+          <input id="star1.3" name="overallScore" type="radio" value="3" class="radio-btn hide" />
+          <label for="star1.3">&#9733</label>
+          <input id="star1.2" name="overallScore" type="radio" value="2" class="radio-btn hide" />
+          <label for="star1.2">&#9733</label>
+          <input id="star1.1" name="overallScore" type="radio" value="1" class="radio-btn hide" />
+          <label for="star1.1">&#9733</label>
+          <div class="clear"></div>
+        </div>
+        <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">How would you rate the
+          features?</p>
+        <div class="rating">
+          <input id="star2.5" name="features" type="radio" value="5" class="radio-btn hide" />
+          <label for="star2.5">&#9733</label>
+          <input id="star2.4" name="features" type="radio" value="4" class="radio-btn hide" />
+          <label for="star2.4">&#9733</label>
+          <input id="star2.3" name="features" type="radio" value="3" class="radio-btn hide" />
+          <label for="star2.3">&#9733</label>
+          <input id="star2.2" name="features" type="radio" value="2" class="radio-btn hide" />
+          <label for="star2.2">&#9733</label>
+          <input id="star2.1" name="features" type="radio" value="1" class="radio-btn hide" />
+          <label for="star2.1">&#9733</label>
+          <div class="clear"></div>
+        </div>
 
-            <p class="text-center max-w-xl mx-auto mt-8 text-base leading-relaxed text-gray-500">How easy is it to use?</p>
-            <div class="rating">
-              <input id="star3.5" name="easyToUse" type="radio" value="5" class="radio-btn hide" />
-              <label for="star3.5">&#9733</label>
-              <input id="star3.4" name="easyToUse" type="radio" value="4" class="radio-btn hide" />
-              <label for="star3.4">&#9733</label>
-              <input id="star3.3" name="easyToUse" type="radio" value="3" class="radio-btn hide" />
-              <label for="star3.3">&#9733</label>
-              <input id="star3.2" name="easyToUse" type="radio" value="2" class="radio-btn hide" />
-              <label for="star3.2">&#9733</label>
-              <input id="star3.1" name="easyToUse" type="radio" value="1" class="radio-btn hide" />
-              <label for="star3.1">&#9733</label>
-              <div class="clear"></div>
-            </div>
+        <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">How easy is it to use?</p>
+        <div class="rating">
+          <input id="star3.5" name="easyToUse" type="radio" value="5" class="radio-btn hide" />
+          <label for="star3.5">&#9733</label>
+          <input id="star3.4" name="easyToUse" type="radio" value="4" class="radio-btn hide" />
+          <label for="star3.4">&#9733</label>
+          <input id="star3.3" name="easyToUse" type="radio" value="3" class="radio-btn hide" />
+          <label for="star3.3">&#9733</label>
+          <input id="star3.2" name="easyToUse" type="radio" value="2" class="radio-btn hide" />
+          <label for="star3.2">&#9733</label>
+          <input id="star3.1" name="easyToUse" type="radio" value="1" class="radio-btn hide" />
+          <label for="star3.1">&#9733</label>
+          <div class="clear"></div>
+        </div>
 
-            <p class="text-center max-w-xl mx-auto mt-8 text-base leading-relaxed text-gray-500">How would you rate the customer support?</p>
-            <div class="rating">
-              <input id="star4.5" name="customerSupport" type="radio" value="5" class="radio-btn hide" />
-              <label for="star4.5">&#9733</label>
-              <input id="star4.4" name="customerSupport" type="radio" value="4" class="radio-btn hide" />
-              <label for="star4.4">&#9733</label>
-              <input id="star4.3" name="customerSupport" type="radio" value="3" class="radio-btn hide" />
-              <label for="star4.3">&#9733</label>
-              <input id="star4.2" name="customerSupport" type="radio" value="2" class="radio-btn hide" />
-              <label for="star4.2">&#9733</label>
-              <input id="star4.1" name="customerSupport" type="radio" value="1" class="radio-btn hide" />
-              <label for="star4.1">&#9733</label>
-              <div class="clear"></div>
-            </div>
+        <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">How would you rate the
+          customer support?</p>
+        <div class="rating">
+          <input id="star4.5" name="customerSupport" type="radio" value="5" class="radio-btn hide" />
+          <label for="star4.5">&#9733</label>
+          <input id="star4.4" name="customerSupport" type="radio" value="4" class="radio-btn hide" />
+          <label for="star4.4">&#9733</label>
+          <input id="star4.3" name="customerSupport" type="radio" value="3" class="radio-btn hide" />
+          <label for="star4.3">&#9733</label>
+          <input id="star4.2" name="customerSupport" type="radio" value="2" class="radio-btn hide" />
+          <label for="star4.2">&#9733</label>
+          <input id="star4.1" name="customerSupport" type="radio" value="1" class="radio-btn hide" />
+          <label for="star4.1">&#9733</label>
+          <div class="clear"></div>
+        </div>
 
-            <p class="text-center max-w-xl mx-auto mt-8 text-base leading-relaxed text-gray-500">How well do they distribute your products to OTAs?</p>
-            <div class="rating">
-              <input id="star5.5" name="distribution" type="radio" value="5" class="radio-btn hide" />
-              <label for="star5.5">&#9733</label>
-              <input id="star5.4" name="distribution" type="radio" value="4" class="radio-btn hide" />
-              <label for="star5.4">&#9733</label>
-              <input id="star5.3" name="distribution" type="radio" value="3" class="radio-btn hide" />
-              <label for="star5.3">&#9733</label>
-              <input id="star5.2" name="distribution" type="radio" value="2" class="radio-btn hide" />
-              <label for="star5.2">&#9733</label>
-              <input id="star5.1" name="distribution" type="radio" value="1" class="radio-btn hide" />
-              <label for="star5.1">&#9733</label>
-              <div class="clear"></div>
-            </div>
+        <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">How well do they distribute
+          your products to OTAs?</p>
+        <div class="rating">
+          <input id="star5.5" name="distribution" type="radio" value="5" class="radio-btn hide" />
+          <label for="star5.5">&#9733</label>
+          <input id="star5.4" name="distribution" type="radio" value="4" class="radio-btn hide" />
+          <label for="star5.4">&#9733</label>
+          <input id="star5.3" name="distribution" type="radio" value="3" class="radio-btn hide" />
+          <label for="star5.3">&#9733</label>
+          <input id="star5.2" name="distribution" type="radio" value="2" class="radio-btn hide" />
+          <label for="star5.2">&#9733</label>
+          <input id="star5.1" name="distribution" type="radio" value="1" class="radio-btn hide" />
+          <label for="star5.1">&#9733</label>
+          <div class="clear"></div>
+        </div>
 
-            <p class="text-center max-w-xl mx-auto mt-8 text-base leading-relaxed text-gray-500">Is your system good value for money?</p>
-            <div class="rating">
-              <input id="star6.5" name="valueForMoney" type="radio" value="5" class="radio-btn hide" />
-              <label for="star6.5">&#9733</label>
-              <input id="star6.4" name="valueForMoney" type="radio" value="4" class="radio-btn hide" />
-              <label for="star6.4">&#9733</label>
-              <input id="star6.3" name="valueForMoney" type="radio" value="3" class="radio-btn hide" />
-              <label for="star6.3">&#9733</label>
-              <input id="star6.2" name="valueForMoney" type="radio" value="2" class="radio-btn hide" />
-              <label for="star6.2">&#9733</label>
-              <input id="star6.1" name="valueForMoney" type="radio" value="1" class="radio-btn hide" />
-              <label for="star6.1">&#9733</label>
-              <div class="clear"></div>
-            </div>
+        <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">Is your system good value for
+          money?</p>
+        <div class="rating">
+          <input id="star6.5" name="valueForMoney" type="radio" value="5" class="radio-btn hide" />
+          <label for="star6.5">&#9733</label>
+          <input id="star6.4" name="valueForMoney" type="radio" value="4" class="radio-btn hide" />
+          <label for="star6.4">&#9733</label>
+          <input id="star6.3" name="valueForMoney" type="radio" value="3" class="radio-btn hide" />
+          <label for="star6.3">&#9733</label>
+          <input id="star6.2" name="valueForMoney" type="radio" value="2" class="radio-btn hide" />
+          <label for="star6.2">&#9733</label>
+          <input id="star6.1" name="valueForMoney" type="radio" value="1" class="radio-btn hide" />
+          <label for="star6.1">&#9733</label>
+          <div class="clear"></div>
+        </div>
 
-            {{! <div>
+        {{! <div>
     <label for="features">How would you rate the features?</label>
     <input id="features" type="number" name="features" value="4" />
   </div>
@@ -165,50 +182,80 @@
     <input id="distribution" type="number" name="distribution" value="4" />
   </div> }}
 
-            <div>
-              <p class="text-center max-w-xl mx-auto mt-8 text-base leading-relaxed text-gray-500">What do you love about your booking system?</p>
-              <textarea id="proBullets" class="text-center block w-full px-5 py-3 mt-4 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300" type="text" name="proBullets[]" value="PRO1" placeholder="Think about your favourite features..."></textarea>
-              <textarea id="proBullets" class="text-center block w-full px-5 py-3 mt-4 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300" type="text" name="proBullets[]" value="PRO2" placeholder="Or perhaps the support you receive..."></textarea>
-              <textarea id="proBullets" class="text-center block w-full px-5 py-3 mt-4 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300" type="text" name="proBullets[]" value="PRO3" placeholder="Or maybe you think it's well priced..."></textarea>
-            </div>
+        <div>
+          <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">What do you love about your
+            booking system?</p>
+          <input id="proBullets1"
+            class="text-center block w-full px-5 py-3 mt-4 text-xl text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
+            type="text" name="proBullets[]" placeholder="Think about your favourite features..."></input>
+          <div id="proButton"
+            class="flex items-center justify-center w-full py-2 mt-2  px-10 text-md text-center text-white transition duration-500 ease-in-out transform bg-blue-200 rounded-xl hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            + Add More</div>
+          <input id="proBullets2"
+            class="invisible h-0 text-center block w-full px-5 text-xl text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
+            type="text" name="proBullets[]" placeholder="Or perhaps the support you receive..."></input>
+          <input id="proBullets3"
+            class="invisible h-0 text-center block w-full px-5 text-xl text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
+            type="text" name="proBullets[]" placeholder="Or maybe you think it's well priced..."></input>
+        </div>
 
-            <div class="text-center">
-              <p class="text-center max-w-xl mx-auto mt-8 text-base leading-relaxed text-gray-500">What do you wish was better?</p>
-              {{! <label for="conBullets">What do you wish was better?</label><br /> }}
-              <textarea id="conBullets" class="text-center block w-full px-5 py-3 mt-4 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300" type="text" name="conBullets[]" value="CON1" placeholder="Is the product missing a feature that you'd love to see?"></textarea>
-              <textarea id="conBullets" class="text-center block w-full px-5 py-3 mt-4 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300" type="text" name="conBullets[]" value="CON2" placeholder="Perhaps there's something that frustrates you about the product?"></textarea>
-              <textarea id="conBullets" class="text-center block w-full px-5 py-3 mt-4 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300" type="text" name="conBullets[]" value="CON3" placeholder="Anything else that other operators should be aware of?"></textarea>
-            </div>
+        <div class="text-center">
+          <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">What do you wish was
+            better?</p>
+          {{! <label for="conBullets">What do you wish was better?</label><br /> }}
+          <input id="conBullets1"
+            class="text-center block w-full px-5 py-3 mt-4 text-xl text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
+            type="text" name="conBullets[]"
+            placeholder="Is the product missing a feature that you'd love to see?"></input>
+          <div id="conButton"
+            class="flex items-center justify-center w-full px-10 py-2 mt-2 text-md text-center text-white transition duration-500 ease-in-out transform bg-blue-200 rounded-xl hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            + Add More</div>
+          <input id="conBullets2"
+            class="invisible h-0 text-center block w-full px-5 text-xl text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
+            type="text" name="conBullets[]"
+            placeholder="Perhaps there's something that frustrates you about the product?"></input>
+          <input id="conBullets3"
+            class="invisible h-0 text-center block w-full px-5  text-xl text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
+            type="text" name="conBullets[]"
+            placeholder="Anything else that other operators should be aware of?"></input>
+        </div>
 
-            <div>
-              <p class="text-center max-w-xl mx-auto mt-8 text-base leading-relaxed text-gray-500">Finally, give your review a title</p>
+        <div>
+          <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">Finally, give your review a
+            title</p>
 
-              <input id="reviewTitle" name="reviewTitle" type="text" placeholder="Made my life so much easier..." class="block w-full mt-4 px-5 py-3 text-center text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300" />
-            </div>
-            <div>
-              <button type="submit" class="flex items-center justify-center w-full px-10 py-4 mt-8 text-base font-medium text-center text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Leave Review</button>
-            </div>
-          </form>
-          <div>
-          </div>
+          <input id="reviewTitle" name="reviewTitle" type="text" placeholder="Made my life so much easier..."
+            class="block w-full mt-4 px-5 py-3 text-center text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300" />
+        </div>
+        <div>
+          <button type="submit"
+            class="flex items-center justify-center w-full px-10 py-4 mt-8 text-xl font-medium text-center text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Leave
+            Review</button>
+        </div>
+        </form>
+        <div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-    <footer class="bg-white" aria-labelledby="footer-heading">
-      {{!-- <h2 id="footer-heading" class="sr-only">Footer</h2> --}}
-      {{!-- <div class="px-4 py-12 mx-auto max-w-full sm:px-6 lg:px-16">
+    </div>
+    </div>
+  </section>
+  <footer class="bg-white" aria-labelledby="footer-heading">
+    {{!-- <h2 id="footer-heading" class="sr-only">Footer</h2> --}}
+    {{!-- <div class="px-4 py-12 mx-auto max-w-full sm:px-6 lg:px-16">
         <div class="xl:grid xl:grid-cols-3 xl:gap-8">
         </div>
       </div> --}}
-      <div class="px-4 py-12 mt-8 mx-auto bg-gray-50 max-w-full sm:px-6 lg:px-16">
-        <div class="flex flex-wrap items-baseline">
-          <a href="https://www.twitter.com/chrisjcastle" class="mx-2 text-gray-500 hover:text-blue-600" rel="noopener noreferrer">@chrisjcastle</a>
-        </div>
+    <div class="px-4 py-12 mt-8 mx-auto bg-gray-50 max-w-full sm:px-6 lg:px-16">
+      <div class="flex flex-wrap items-baseline">
+        <a href="https://www.twitter.com/chrisjcastle" class="mx-2 text-gray-500 hover:text-blue-600"
+          rel="noopener noreferrer">@chrisjcastle</a>
       </div>
-    </footer>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script defer type="text/javascript" src="javascripts/script.js"></script>
-  </body>
+    </div>
+  </footer>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer type="text/javascript" src="javascripts/script.js"></script>
+  <script defer type="text/javascript" src="/javascripts/reviewform.js"></script>
+</body>
+
 </html>

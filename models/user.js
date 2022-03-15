@@ -2,34 +2,41 @@
 
 // Added googleID as a property to Schema to enable OAuth
 
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require("mongoose");
 const findOrCreate = require("mongoose-findorcreate");
 
 const userSchema = new Schema(
   {
     firstName: String,
     lastName: String,
-    googleId: {type: String},
+    googleId: { type: String },
     email: {
       type: String,
       sparse: true,
-      required: [true, 'Email is required.'],
-      match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address.'],
+      required: [true, "Email is required."],
+      match: [/^\S+@\S+\.\S+$/, "Please use a valid email address."],
       unique: true,
       lowercase: true,
-      trim: true
+      trim: true,
     },
     companyName: String,
-    reviews: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Review'
-    }],
+    reviews: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
     password: String,
+    confirmationCode: String,
+    verified: {
+      type: Boolean,
+      default: false
+    }
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
 userSchema.plugin(findOrCreate);
-module.exports = model('User', userSchema);
+module.exports = model("User", userSchema);

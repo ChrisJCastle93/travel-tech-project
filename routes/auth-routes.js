@@ -9,6 +9,22 @@ const bcryptSalt = 10;
 const ensureLogin = require("connect-ensure-login");
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
 const filteredDomains = require("../public/javascripts/filteredDomains");
+const nodemailer = require("nodemailer");
+
+// Nodemailer set up
+
+const nodemailerSetup = async () => {
+  let transporter = await nodemailer.createTransport({
+    service: "Gmail", // can switch for 'hotmail'
+    auth: {
+      user: "chrisjcastle93@gmail.com",
+      pass: "ebnvdoxmgmwebdau",
+    },
+  });
+  return transporter;
+};
+
+nodemailerSetup();
 
 // SIGNUP
 
@@ -33,6 +49,11 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
     });
     return;
   }
+  const characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let confirmationCode = "";
+  for (let i = 0; i < 25; i++) {
+    confirmationCode += characters[Math.floor(Math.random() * characters.length)];
+  }
   User.findOne({ email })
     .then((user) => {
       if (user !== null) {
@@ -52,11 +73,23 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
         verified: false,
         companyName: companyName,
         password: hashPass,
+        confirmationCode,
       })
         .then((user) => {
           console.log("new user created ", user.email);
           req.session.currentUser = user;
           res.redirect("/reviews/new");
+          return nodemailerSetup();
+        })
+        .then((transporter) => {
+          console.log('prepping to send email')
+          return transporter.sendMail({
+            from: "Chris Castle <chrisjcastle93@gmail.com>",
+            to: req.session.currentUser.email,
+            subject: "TrustedTravelTech - Verify Your Email",
+            text: confirmationCode,
+            html: `<a href='http://localhost:3000/auth/confirm/${confirmationCode}'>Verify Email</a>`,
+          });
         })
         .catch((err) => next(err));
     })
@@ -73,6 +106,19 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
         next(err);
       }
     });
+});
+
+router.get("/auth/confirm/:confirmCode", (req, res, next) => {
+  const { confirmCode } = req.params;
+  User.findOneAndUpdate({ confirmationCode: confirmCode }, { verified: true }, { new: true })
+    .then((foundUser) => {
+      console.log(foundUser)
+      console.log("User", foundUser.email, "now has verified status:", foundUser.verified);
+      req.session.currentUser = foundUser;
+      req.session.success = "You are now verified.";
+      res.redirect("/");
+    })
+    .catch((err) => console.log(err));
 });
 
 // Then, we have to define the routes and the corresponding functionality associated with each one. The GET route has one mission, and that is to load the view we will use. Meanwhile, the POST will contain the Passport functionality. The routes are in routes/auth-routes.js, and we have to add the following: In the routes/auth-route.js, let’s add failureFlash option:
@@ -103,13 +149,13 @@ router.get("/private-page", isLoggedIn, (req, res, next) => {
 
 router.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
-router.get("/auth/google/callback", passport.authenticate("google", { failureRedirect: '/auth/google/failure' }), function (req, res) {
+router.get("/auth/google/callback", passport.authenticate("google", { failureRedirect: "/auth/google/failure" }), function (req, res) {
   res.redirect("/");
 });
 
 // Passport exposes a logout() function on req object that can be called from any route handler which needs to terminate a login session. We will declare the logout route in the auth-routes.js file as it follows:
 
-router.get("/logout", isLoggedIn, (req, res) => {
+router.get("/logout", (req, res) => {
   req.logout();
   req.session.destroy();
   res.redirect("/");

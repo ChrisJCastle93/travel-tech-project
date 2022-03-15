@@ -4872,10 +4872,12 @@ const runFilters = (checkedFilters) => {
     console.log("DID COMPANY PASS", doesThisCompanyPass)
     if (!doesThisCompanyPass) {
       company.classList.add("invisible");
-      company.classList.add("h-0");
+      company.classList.add("h-0", "mt-0");
+      company.classList.remove("mt-12");
     } else {
       company.classList.remove("invisible");
-      company.classList.remove("h-0");
+      company.classList.remove("h-0", "mt-0");
+      company.classList.add("mt-12");
     }
   });
 };
