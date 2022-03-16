@@ -82,13 +82,12 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
           return nodemailerSetup();
         })
         .then((transporter) => {
-          console.log('prepping to send email')
           return transporter.sendMail({
             from: "Chris Castle <chrisjcastle93@gmail.com>",
             to: req.session.currentUser.email,
             subject: "TrustedTravelTech - Verify Your Email",
             text: confirmationCode,
-            html: `<a href='http://localhost:3000/auth/confirm/${confirmationCode}'>Verify Email</a>`,
+            html: `<a href='http://www.trustedtraveltech.com/auth/confirm/${confirmationCode}'>Verify Email</a>`,
           });
         })
         .catch((err) => next(err));
@@ -112,8 +111,6 @@ router.get("/auth/confirm/:confirmCode", (req, res, next) => {
   const { confirmCode } = req.params;
   User.findOneAndUpdate({ confirmationCode: confirmCode }, { verified: true }, { new: true })
     .then((foundUser) => {
-      console.log(foundUser)
-      console.log("User", foundUser.email, "now has verified status:", foundUser.verified);
       req.session.currentUser = foundUser;
       req.session.success = "You are now verified.";
       res.redirect("/");

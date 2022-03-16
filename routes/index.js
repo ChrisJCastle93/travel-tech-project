@@ -16,7 +16,7 @@ router.get("/", (req, res, next) => {
         return company;
       });
       companies.sort((a, b) => {
-        return a.overall - b.overall;
+        return b.overall - a.overall;
       });
       res.render("index", { user: req.session.currentUser, companies });
     })
