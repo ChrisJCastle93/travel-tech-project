@@ -1,9 +1,9 @@
 {
-  "name": "localpassport",
+  "name": "TrustedTravelTech",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build:css": "postcss public/stylesheets/tailwind.css -o public/stylesheets/style.css",
+    "build:css": "npx tailwindcss@2.2.16 build -i public/stylesheets/tailwind.css -o public/stylesheets/style.css",
     "start": "node ./bin/www",
     "dev": "DEBUG=starter-code:* nodemon ./bin/www",
     "dev-windows": "nodemon ./bin/www",
@@ -24,6 +24,7 @@
     "connect-mongo": "^4.6.0",
     "cookie-parser": "^1.4.3",
     "crypto": "^1.0.1",
+    "cssnano": "^5.1.4",
     "daisyui": "^1.25.3",
     "dotenv": "^6.0.0",
     "events": "^3.3.0",
@@ -46,15 +47,16 @@
     "querystring": "^0.2.1",
     "sass": "^1.45.2",
     "serve-favicon": "^2.5.0",
-    "tailwindcss": "^2.2.16",
     "twitter-api-v2": "^1.11.0",
     "twitter-lite": "^1.1.0"
   },
   "devDependencies": {
+    "@tailwindcss/jit": "^0.1.18",
     "@tailwindcss/typography": "^0.4.1",
     "autoprefixer": "^10.4.2",
     "nodemon": "^1.12.1",
-    "postcss": "^8.4.5",
-    "postcss-loader": "^6.2.1"
+    "postcss": "^8.4.12",
+    "postcss-loader": "^6.2.1",
+    "tailwindcss": "^2.2.16"
   }
 }

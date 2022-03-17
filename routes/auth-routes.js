@@ -87,7 +87,7 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
             to: req.session.currentUser.email,
             subject: "TrustedTravelTech - Verify Your Email",
             text: confirmationCode,
-            html: `<a href='http://www.trustedtraveltech.com/auth/confirm/${confirmationCode}'>Verify Email</a>`,
+            html: `<a href='https://www.trustedtraveltech.com/auth/confirm/${confirmationCode}'>Verify Email</a>`,
           });
         })
         .catch((err) => next(err));
