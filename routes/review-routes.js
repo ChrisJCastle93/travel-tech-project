@@ -60,7 +60,7 @@ router.post("/new", isLoggedIn, (req, res, next) => {
       })
       .then((company) => {
         comp = company
-        // sendTweet(rev, company);
+        sendTweet(rev, company);
         return User.findByIdAndUpdate(req.session.currentUser, { $push: { reviews: rev._id } }, { new: true });
       })
       .then(user => {
