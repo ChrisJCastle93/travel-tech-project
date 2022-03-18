@@ -1,3 +1,5 @@
+// This is simply a list of domains that I wanted to prevent the user from signing up with to enhance the trust users place in people that have left reviews, and they get used in the auth route to do that.
+
 const filteredDomains = [
   "0-mail.com",
   "027168.com",

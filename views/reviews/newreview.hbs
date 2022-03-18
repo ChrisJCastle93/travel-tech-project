@@ -26,7 +26,6 @@
                 role="alert">{{errorMessage}}</div>
               {{/if}}
               {{#if user.companyName}}
-              {{!-- <p class="max-w-xl mx-auto text-xl text-center font-medium leading-relaxed text-gray-600"> You're leaving a review as {{user.firstName}} of {{user.companyName}} </p> --}}
               {{else}}
               <div>
                 <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">What is the name of
@@ -48,7 +47,6 @@
       text-center
       font-normal
       text-neutral-600
-      {{!-- bg-white bg-clip-padding bg-no-repeat --}}
       border border-transparent
       rounded
       transition
@@ -161,27 +159,6 @@
           <label for="star6.1">&#9733</label>
           <div class="clear"></div>
         </div>
-
-        {{! <div>
-    <label for="features">How would you rate the features?</label>
-    <input id="features" type="number" name="features" value="4" />
-  </div>
-
-  <div>
-    <label for="easyToUse">How easy is it to use?</label>
-    <input id="easyToUse" type="number" name="easyToUse" value="4" />
-  </div>
-
-  <div>
-    <label for="customerSupport">How would you rate the customer support?</label>
-    <input id="customerSupport" type="number" name="customerSupport" value="4" />
-  </div>
-
-  <div>
-    <label for="distribution">How well do they distribute your products?</label>
-    <input id="distribution" type="number" name="distribution" value="4" />
-  </div> }}
-
         <div>
           <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">What do you love about your
             booking system?</p>
@@ -202,7 +179,6 @@
         <div class="text-center">
           <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">What do you wish was
             better?</p>
-          {{! <label for="conBullets">What do you wish was better?</label><br /> }}
           <input id="conBullets1"
             class="text-center block w-full px-5 py-3 mt-4 text-xl text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
             type="text" name="conBullets[]"
@@ -241,11 +217,6 @@
     </div>
   </section>
   <footer class="bg-white" aria-labelledby="footer-heading">
-    {{!-- <h2 id="footer-heading" class="sr-only">Footer</h2> --}}
-    {{!-- <div class="px-4 py-12 mx-auto max-w-full sm:px-6 lg:px-16">
-        <div class="xl:grid xl:grid-cols-3 xl:gap-8">
-        </div>
-      </div> --}}
     <div class="px-4 py-12 mt-8 mx-auto bg-gray-50 max-w-full sm:px-6 lg:px-16">
       <div class="flex flex-wrap items-baseline">
         <a href="https://www.twitter.com/chrisjcastle" class="mx-2 text-gray-500 hover:text-blue-600"

@@ -1,3 +1,5 @@
+// Test Driven Development. In this file I'm running mock tests for the trickiest part of my project - calculating the averages per reviewed aspect as well as an overall score. Red-Green-Refactor!
+
 const { averagesObject, getOverallReviewScore} = require("../public/javascripts/averages");
 
 const reviews = [
@@ -29,7 +31,7 @@ const reviews = [
     },
     __v: 0
   }
-]
+];
 
 describe("The overall review score", () => {
   it("should be a number", () => {
@@ -58,7 +60,7 @@ describe("Values on the average scores object", () => {
           overallScore: 4
         }
       }
-    ]
+    ];
     expect(averagesObject(obj).overallScore).toBe(4);
   });
 });

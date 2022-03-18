@@ -1,3 +1,5 @@
+// DOM manipulation for the review form - gives the user the ability to show extra fields to add more information about their review.
+
 document.getElementById("proButton").addEventListener("click", () => {
   document.getElementById("proButton").classList.add("invisible", "h-0", "py-0", "px-0");
   document.getElementById("proButton").classList.remove("py-4", "mt-2", "px-10");

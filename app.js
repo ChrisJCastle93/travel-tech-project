@@ -6,8 +6,6 @@ const hbs = require("hbs");
 const mongoose = require("mongoose");
 const logger = require("morgan");
 const path = require("path");
-// const sass = require('sass');
-// Once the packages are installed, we have to require them in the app.js file:
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const bcrypt = require("bcrypt");
@@ -15,8 +13,6 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const flash = require("connect-flash");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const seedDb = require("./db/seed");
-const createCompanies = require("./db/seedCos");
 
 require("dotenv").config();
 
@@ -34,14 +30,15 @@ const Company = require("./models/company.js");
 // INITIALIZE EXPRESS
 
 const app = express();
-// createCompanies();
-// seedDb();
+
+// ESTABLISH DB CONNECTION
 
 const clientP = mongoose
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
+    useCreateIndex: true,
   })
   .then((m) => {
     console.log(`Connected to Mongo! Database name: "${m.connections[0].name}"`);
@@ -51,8 +48,7 @@ const clientP = mongoose
     console.error("Error connecting to mongo", err);
   });
 
-
-mongoose.set("useCreateIndex", true);
+// SETTING UP SESSION AND COOKIES
 
 app.use(
   session({
@@ -61,8 +57,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      maxAge: 10060000, // 60 * 1000 ms === 1 min
-      // expires: false,
+      maxAge: 10060000,
     },
     store: MongoStore.create({
       clientPromise: clientP,
@@ -75,6 +70,8 @@ app.use(
 );
 
 // MIDDLEWARE SETUP
+
+// Displaying errors and success messages. They're attached to the req object and passed to the views.
 
 app.use(function (req, res, next) {
   const err = req.session.error;
@@ -89,23 +86,24 @@ app.use(function (req, res, next) {
   next();
 });
 
-// DEFINING THE METHODS OF PASSPORT
+// PASSPORT SET UP
+
 app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser((user, cb) => {
-  // console.log('SERIALIZING USER', user)
   cb(null, user.id);
 });
 
 passport.deserializeUser((id, cb) => {
   User.findById(id)
     .then((user) => {
-      // console.log('DESERIALIZING USER', user)
       cb(null, user);
     })
     .catch((error) => cb(error));
 });
+
+// PASSPORT LOCAL STRAT TO AUTHENTICATE LOGIN
 
 passport.use(
   new LocalStrategy(
@@ -144,6 +142,8 @@ passport.use(
   )
 );
 
+// PASSPORT GOOGLE STRAT TO FACILITATE SSO
+
 passport.use(
   new GoogleStrategy(
     {
@@ -161,17 +161,15 @@ passport.use(
           lastName: profile.name.familyName,
         },
         function (err, user) {
-          // user.firstName
           req.session.currentUser = user;
           return cb(err, user);
         }
       );
-      // User.findOneAndUpdate( { email: profile.emails[0].value }, { firstName: 'John' })
     }
   )
 );
 
-// Next up, we have to configure the session middleware. First of all, we have to configure the express-session, indicating which is the secret key it will use to be generated. Add the session right before the routes middleware (toward the end of app.js)
+// Configuring all of the basic middleware - bodyparser, cookieparser, serving static files from the public folder
 
 app.use(logger("dev"));
 app.use(bodyParser.json());
@@ -186,13 +184,15 @@ hbs.registerHelper("times", function (n, block) {
   for (var i = 0; i < n; ++i) accum += block.fn(i);
   return accum;
 });
-// app.engine('handlebars', hbs.engine);
+
+// Setting views file and setting hbs as the views engine
+
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(favicon(path.join(__dirname, "public", "images", "favicon.ico")));
 
-// default value for title local
+// Setting default value for title local
 
 app.locals.title = "TrustedTravelTech";
 
@@ -200,7 +200,7 @@ app.locals.title = "TrustedTravelTech";
 
 // ROUTERS
 
-const index = require("./routes/index");
+const index = require("./routes/index-routes");
 app.use("/", index);
 
 const auth = require("./routes/auth-routes");

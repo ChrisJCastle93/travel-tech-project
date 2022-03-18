@@ -6,10 +6,32 @@ const Company = require("../models/company");
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
 const { averagesObject, getOverallReviewScore } = require("../public/javascripts/averages");
 
-/* READ */
+// Created an individual company page where you could see reviews left for that company. It require accessing the Company and User collections, sorting and deep-populating the query before calculating the averages and displaying all reviews. 
+
+router.get("/:id", (req, res, next) => {
+  const { id } = req.params;
+  let comp;
+  Company.findById(id)
+    .then((company) => {
+      comp = company;
+      return Review.find({ companyBeingReviewed: company })
+        .sort("timestamp")
+        .populate([{ path: "companyBeingReviewed" }, { path: "owner" }]);
+    })
+    .then((reviews) => {
+      reviews.forEach(review => console.log(review.owner));
+      const averagesObj = averagesObject(reviews);
+      const overall = getOverallReviewScore(reviews);
+      res.render("companyprofile", { user: req.session.currentUser, reviews, averagesObj, noReviews: reviews.length, overall, comp });
+    })
+    .catch((err) => console.log(err));
+});
+
+// CRUD routes to be able to viwe and add companies to DB using Postman.
+
 router.get("/", (req, res, next) => {
   Company.find()
-    .then((reviews) => res.send(reviews))
+    .then((companies) => res.send(companies))
     .catch((err) => console.log(err));
 });
 
@@ -39,7 +61,6 @@ router.post("/new", (req, res, next) => {
     .catch((err) => console.log(err));
 });
 
-// UPDATE
 router.post("/:id/edit", isLoggedIn, (req, res, next) => {
   const { id } = req.params;
   const { overallScore, features, customerSupport, valueForMoney, easyToUse, distribution, proBullets, conBullets, reviewTitle } = req.body;
@@ -62,46 +83,23 @@ router.post("/:id/edit", isLoggedIn, (req, res, next) => {
   )
     .then((reviewFromDB) => {
       console.log(reviewFromDB.id, "updated");
-      res.redirect("/"); // could change to user profile, need to pass in success message somehow.
+      res.redirect("/");
     })
     .catch((err) => console.log(err));
 });
 
-// DELETE
 router.post("/:id/delete", isLoggedIn, (req, res, next) => {
   console.log("accessed delete route");
   const { id } = req.params;
   Review.findOneAndDelete(id)
     .then((deletedUser) => {
       console.log("Deleted user:", deletedUser.email);
-      res.redirect("/"); // could change to user profile, need to pass in success message somehow.
+      res.redirect("/");
     })
     .catch((err) => {
       console.log(err);
       res.render("/user-profile", { errorMessage: "User could not be deleted. Please contact support." });
     });
-});
-
-// COMPANIES INDIVIDUAL PAGE
-
-/* GET Individual Review Page */
-router.get("/:id", (req, res, next) => {
-  const { id } = req.params;
-  let comp;
-  Company.findById(id)
-    .then((company) => {
-      comp = company;
-      return Review.find({ companyBeingReviewed: company })
-        .sort("timestamp")
-        .populate([{ path: "companyBeingReviewed" }, { path: "owner" }]);
-    })
-    .then((reviews) => {
-      reviews.forEach(review => console.log(review.owner))
-      const averagesObj = averagesObject(reviews);
-      const overall = getOverallReviewScore(reviews);
-      res.render("companyprofile", { user: req.session.currentUser, reviews, averagesObj, noReviews: reviews.length, overall, comp });
-    })
-    .catch((err) => console.log(err));
 });
 
 module.exports = router;

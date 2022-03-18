@@ -1,9 +1,0 @@
-Start: NPM RUN DEV
-
-Last updates: 
-- you updated the User, Review, Companies models, but you need to update the user flows and check that they are working.
-- connect ensure login wasn't working, the issue was sessions but you fixed it
-- Successfully deployed to heroku, and then updated Google to use those URLs.
-
-Next:
-- test that models are working by creating a User, Creating a Company, and Leaving a review using postman.
