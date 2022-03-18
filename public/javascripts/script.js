@@ -4755,6 +4755,8 @@ const filteredDomains = [
   "zzz.pl",
 ];
 
+// Below, we have frontend form validation that prevents a user from signing up with an email address with what is likely a personal domain.
+
 function professionalEmailOnly(e) {
   const email = document.getElementById("email").value;
   if (filteredDomains.indexOf(email.split("@")[1]) !== -1) {
@@ -4765,6 +4767,8 @@ function professionalEmailOnly(e) {
     document.getElementById("passwordError").classList.remove("pt-2");
   }
 }
+
+// Below, we have frontend form validation that prevents a user from trying to sign up with an invalid password, enhancing security. 
 
 function passwordPass(e) {
   const password = document.getElementById("password").value;
@@ -4779,6 +4783,8 @@ function passwordPass(e) {
     }
   }
 }
+
+// Below, I'm handling all of the filters on the homepage that allows users to filter all of the companies that have been reviewed by their different aspects. There's 5 different event listeners for the 5 filters. Whenever one is selected, it toggles the checkedFilter booleans and runs a function that takes in those checked filters. This allows users to combine different filters and see only those that meet all of their requirements. Neat!
 
 const checkedFilters = {
   easy: false,
@@ -4859,7 +4865,7 @@ const runFilters = (checkedFilters) => {
     let doesThisCompanyPass = true;
     for (key in checkedFilters) {
       if (checkedFilters[key]) {
-        console.log("CHECKING COMPANIES FOR", key)
+        console.log("CHECKING COMPANIES FOR", key);
         console.log("COMPANY SCORE FOR", key, Number(company.getAttribute(`data-${key}`)));
         if (Number(company.getAttribute(`data-${key}`)) < 4) {
           console.log(`company does not pass for ${key}, marking false.`);
@@ -4869,7 +4875,7 @@ const runFilters = (checkedFilters) => {
         }
       }
     }
-    console.log("DID COMPANY PASS", doesThisCompanyPass)
+    console.log("DID COMPANY PASS", doesThisCompanyPass);
     if (!doesThisCompanyPass) {
       company.classList.add("invisible");
       company.classList.add("h-0", "mt-0");
@@ -4881,24 +4887,3 @@ const runFilters = (checkedFilters) => {
     }
   });
 };
-
-// const runFilters = (checkedFilters) => {
-//   const companies = Array.from(document.getElementsByClassName("companyDOM"));
-//     for(key in checkedFilters) {
-//       if(checkedFilters[key]) {
-//         console.log('will need to filter by', key)
-//       }
-//     }
-// };
-
-// assume easy features has been clicked.
-
-// const easyFilter = () => {
-//   const companies = Array.from(document.getElementsByClassName("companyDOM"));
-//   companies.forEach(company => {
-//     if(company.getAttribute("data-easy") > 3) {
-//       company.classList.toggle('invisible')
-//       company.classList.toggle('h-0')
-//     }
-//   })
-// };

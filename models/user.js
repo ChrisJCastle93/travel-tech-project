@@ -1,9 +1,7 @@
-// models/user.js. In the models folder create User.model.js file inside it. In models/User.model.js, we will define the Schema with username and password as follows:
-
-// Added googleID as a property to Schema to enable OAuth
-
 const { Schema, model } = require("mongoose");
 const findOrCreate = require("mongoose-findorcreate");
+
+// User Schema for the users that are signing up and leaving reviews.
 
 const userSchema = new Schema(
   {
@@ -30,8 +28,8 @@ const userSchema = new Schema(
     confirmationCode: String,
     verified: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   {
     timestamps: true,

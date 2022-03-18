@@ -3,6 +3,8 @@ const User = require("../models/user");
 const Review = require("../models/review");
 const Company = require("../models/company");
 
+// Created a seed function to seed the DB in the dev environment. The function is executed in the app.js file.
+
 const seedDb = () => {
   let comp;
   let userReviewer;

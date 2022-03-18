@@ -3,13 +3,13 @@ const Company = require("../models/company");
 const router = express.Router();
 const { averagesObject, getOverallReviewScore } = require("../public/javascripts/averages");
 
-/* GET home page */
+// GET route for rendering the homepage. We get the companies from the DB and run the functions to calculate the averages.
+
 router.get("/", (req, res, next) => {
   Company.find()
     .populate("reviews")
     .then((companiesFromDb) => {
       const companies = companiesFromDb.map((company, index) => {
-        // console.log(company.reviews)
         company.averages = averagesObject(company.reviews);
         company.overall = getOverallReviewScore(company.reviews);
         company.index = index + 1;

@@ -6,27 +6,12 @@ const passport = require("passport");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const bcryptSalt = 10;
-const ensureLogin = require("connect-ensure-login");
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
 const filteredDomains = require("../public/javascripts/filteredDomains");
 const nodemailer = require("nodemailer");
+const nodemailerSetup = require('../public/javascripts/nodemailer');
 
-// Nodemailer set up
-
-const nodemailerSetup = async () => {
-  let transporter = await nodemailer.createTransport({
-    service: "Gmail", // can switch for 'hotmail'
-    auth: {
-      user: "chrisjcastle93@gmail.com",
-      pass: "ebnvdoxmgmwebdau",
-    },
-  });
-  return transporter;
-};
-
-nodemailerSetup();
-
-// SIGNUP
+// SIGNUP ROUTES, implemented with server-side validation on the email and password used. Users are also issued a verification code over email to verify their sign up.
 
 router.get("/signup", isLoggedOut, (req, res, next) => res.render("auth/signup", { layout: false }));
 
@@ -107,6 +92,8 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
     });
 });
 
+// Route to verify email address - user clicks link in email, and this switches the boolean on verified in the User model from false to true;
+
 router.get("/auth/confirm/:confirmCode", (req, res, next) => {
   const { confirmCode } = req.params;
   User.findOneAndUpdate({ confirmationCode: confirmCode }, { verified: true }, { new: true })
@@ -118,9 +105,7 @@ router.get("/auth/confirm/:confirmCode", (req, res, next) => {
     .catch((err) => console.log(err));
 });
 
-// Then, we have to define the routes and the corresponding functionality associated with each one. The GET route has one mission, and that is to load the view we will use. Meanwhile, the POST will contain the Passport functionality. The routes are in routes/auth-routes.js, and we have to add the following: In the routes/auth-route.js, let’s add failureFlash option:
-
-// LOGIN ROUTES
+// LOGIN ROUTES - authed with Passport Local
 
 router.get("/login", isLoggedOut, (req, res, next) => {
   res.render("auth/login", { layout: false });
@@ -136,13 +121,7 @@ router.post(
   })
 );
 
-// PRIVATE ROUTES
-
-router.get("/private-page", isLoggedIn, (req, res, next) => {
-  res.render("private", { user: req.session.currentUser });
-});
-
-// GOOGLE ROUTES
+// GOOGLE SSO ROUTES - PASSPORT
 
 router.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
@@ -150,7 +129,7 @@ router.get("/auth/google/callback", passport.authenticate("google", { failureRed
   res.redirect("/");
 });
 
-// Passport exposes a logout() function on req object that can be called from any route handler which needs to terminate a login session. We will declare the logout route in the auth-routes.js file as it follows:
+// Logout route
 
 router.get("/logout", (req, res) => {
   req.logout();

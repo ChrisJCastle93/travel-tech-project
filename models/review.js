@@ -1,5 +1,7 @@
 const { Schema, model } = require("mongoose");
 
+// Review Schema for the reviews being left by users about companies. It references the both the review and company schema.
+
 const contentSchema = new Schema({
   reviewTitle: String,
   overallScore: Number,
