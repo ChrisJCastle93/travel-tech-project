@@ -61,7 +61,7 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
         confirmationCode,
       })
         .then((user) => {
-          console.log("new user created ", user.email);
+          console.log("new user created ", user);
           req.session.currentUser = user;
           res.redirect("/reviews/new");
           return nodemailerSetup();

@@ -116,17 +116,17 @@
             <br />
             <p class="pt-3"><b>✅ Pros:</b>
               <ul class="pl-6">
-                <li class="pt-3">• PRO1</li>
-                <li class="pt-3">• PRO2</li>
-                <li class="pt-3">• PRO3</li>
+                {{#each this.content.proBullets}}
+                <li class="pt-3">• {{this}} </li>
+                {{/each}}
               </ul>
             </p>
             <br />
             <p class="pt-3"><b>❌ Cons:</b>
               <ul class="pl-6">
-                <li class="pt-3">• CON1</li>
-                <li class="pt-3">• CON2</li>
-                <li class="pt-3">• CON3</li>
+                {{#each this.content.conBullets}}
+                <li class="pt-3">• {{this}} </li>
+                {{/each}}
               </ul>
             </p>
           </div>

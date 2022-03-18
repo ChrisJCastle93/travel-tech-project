@@ -15,7 +15,7 @@ router.get("/:id", (req, res, next) => {
     .then((company) => {
       comp = company;
       return Review.find({ companyBeingReviewed: company })
-        .sort("timestamp")
+        .sort({createdAt:-1})
         .populate([{ path: "companyBeingReviewed" }, { path: "owner" }]);
     })
     .then((reviews) => {

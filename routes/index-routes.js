@@ -1,3 +1,4 @@
+const { compareSync } = require("bcrypt");
 const express = require("express");
 const Company = require("../models/company");
 const router = express.Router();
@@ -8,17 +9,25 @@ const { averagesObject, getOverallReviewScore } = require("../public/javascripts
 router.get("/", (req, res, next) => {
   Company.find()
     .populate("reviews")
+    .lean()
     .then((companiesFromDb) => {
-      const companies = companiesFromDb.map((company, index) => {
-        company.averages = averagesObject(company.reviews);
-        company.overall = getOverallReviewScore(company.reviews);
+      companiesFromDb.forEach((company, index) => {
+        if (company.reviews) {
+          company.averages = averagesObject(company.reviews);
+          company.overall = getOverallReviewScore(company.reviews);
+        }
         company.index = index + 1;
-        return company;
       });
-      companies.sort((a, b) => {
+      const companiesWithReviews = companiesFromDb.filter((company) => company.overall !== undefined);
+      const companiesWithoutReviews = companiesFromDb.filter((company) => company.overall == undefined);
+      companiesWithReviews.sort((a, b) => {
         return b.overall - a.overall;
       });
-      res.render("index", { user: req.session.currentUser, companies });
+      const mergedArr = [...companiesWithReviews, ...companiesWithoutReviews];
+      mergedArr.forEach((company, index) => {
+        company.index = index + 1;
+      });
+      res.render("index", { user: req.session.currentUser, companies: mergedArr });
     })
     .catch((err) => console.log(err));
 });

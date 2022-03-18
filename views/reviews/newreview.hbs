@@ -18,6 +18,8 @@
           Leave a review.
         </h1>
         <div class="mt-8">
+                          <p class="text-center max-w-xl mx-auto text-md leading-relaxed text-gray-500">Please complete all questions and add stars</p>
+                          <p class="text-center mt-4 text-xxl">&#127775 &#127775 &#127775 &#127775 &#127775 </p>
           <div class="">
             <form action="/reviews/new" method="POST" id="form-container">
               {{#if errorMessage}}
@@ -26,6 +28,7 @@
                 role="alert">{{errorMessage}}</div>
               {{/if}}
               {{#if user.companyName}}
+              <div></div>
               {{else}}
               <div>
                 <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">What is the name of
@@ -38,7 +41,7 @@
               {{/if}}
               <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">Which company is your
                 review about?</p>
-              <select name="companyBeingReviewed"
+              <select required name="companyBeingReviewed"
                 class="form-select appearance-none
       block
       w-full
@@ -69,7 +72,7 @@
         <p class="text-center max-w-xl mx-auto mt-4 text-xl leading-relaxed text-gray-500">How would you rate your
           system overall?</p>
         <div class="rating">
-          <input id="star1.5" name="overallScore" type="radio" value="5" class="radio-btn hide" />
+          <input id="star1.5" name="overallScore" type="radio" value="5" class="radio-btn hide" required />
           <label for="star1.5">&#9733</label>
           <input id="star1.4" name="overallScore" type="radio" value="4" class="radio-btn hide" />
           <label for="star1.4">&#9733</label>
@@ -84,7 +87,7 @@
         <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">How would you rate the
           features?</p>
         <div class="rating">
-          <input id="star2.5" name="features" type="radio" value="5" class="radio-btn hide" />
+          <input id="star2.5" name="features" type="radio" value="5" class="radio-btn hide" required />
           <label for="star2.5">&#9733</label>
           <input id="star2.4" name="features" type="radio" value="4" class="radio-btn hide" />
           <label for="star2.4">&#9733</label>
@@ -99,7 +102,7 @@
 
         <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">How easy is it to use?</p>
         <div class="rating">
-          <input id="star3.5" name="easyToUse" type="radio" value="5" class="radio-btn hide" />
+          <input id="star3.5" name="easyToUse" type="radio" value="5" class="radio-btn hide" required />
           <label for="star3.5">&#9733</label>
           <input id="star3.4" name="easyToUse" type="radio" value="4" class="radio-btn hide" />
           <label for="star3.4">&#9733</label>
@@ -115,7 +118,7 @@
         <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">How would you rate the
           customer support?</p>
         <div class="rating">
-          <input id="star4.5" name="customerSupport" type="radio" value="5" class="radio-btn hide" />
+          <input id="star4.5" name="customerSupport" type="radio" value="5" class="radio-btn hide" required />
           <label for="star4.5">&#9733</label>
           <input id="star4.4" name="customerSupport" type="radio" value="4" class="radio-btn hide" />
           <label for="star4.4">&#9733</label>
@@ -131,7 +134,7 @@
         <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">How well do they distribute
           your products to OTAs?</p>
         <div class="rating">
-          <input id="star5.5" name="distribution" type="radio" value="5" class="radio-btn hide" />
+          <input id="star5.5" name="distribution" type="radio" value="5" class="radio-btn hide" required />
           <label for="star5.5">&#9733</label>
           <input id="star5.4" name="distribution" type="radio" value="4" class="radio-btn hide" />
           <label for="star5.4">&#9733</label>
@@ -147,7 +150,7 @@
         <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">Is your system good value for
           money?</p>
         <div class="rating">
-          <input id="star6.5" name="valueForMoney" type="radio" value="5" class="radio-btn hide" />
+          <input id="star6.5" name="valueForMoney" type="radio" value="5" class="radio-btn hide" required />
           <label for="star6.5">&#9733</label>
           <input id="star6.4" name="valueForMoney" type="radio" value="4" class="radio-btn hide" />
           <label for="star6.4">&#9733</label>
@@ -162,7 +165,7 @@
         <div>
           <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">What do you love about your
             booking system?</p>
-          <input id="proBullets1"
+          <input id="proBullets1" required
             class="text-center block w-full px-5 py-3 mt-4 text-xl text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
             type="text" name="proBullets[]" placeholder="Think about your favourite features..."></input>
           <div id="proButton"
@@ -179,18 +182,18 @@
         <div class="text-center">
           <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">What do you wish was
             better?</p>
-          <input id="conBullets1"
+          <input id="conBullets1" required
             class="text-center block w-full px-5 py-3 mt-4 text-xl text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
             type="text" name="conBullets[]"
             placeholder="Is the product missing a feature that you'd love to see?"></input>
           <div id="conButton"
             class="flex items-center justify-center w-full px-10 py-2 mt-2 text-md text-center text-white transition duration-500 ease-in-out transform bg-blue-200 rounded-xl hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
             + Add More</div>
-          <input id="conBullets2"
+          <input id="conBullets2" 
             class="invisible h-0 text-center block w-full px-5 text-xl text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
             type="text" name="conBullets[]"
             placeholder="Perhaps there's something that frustrates you about the product?"></input>
-          <input id="conBullets3"
+          <input id="conBullets3" 
             class="invisible h-0 text-center block w-full px-5  text-xl text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
             type="text" name="conBullets[]"
             placeholder="Anything else that other operators should be aware of?"></input>
@@ -200,7 +203,7 @@
           <p class="text-center max-w-xl mx-auto mt-8 text-xl leading-relaxed text-gray-500">Finally, give your review a
             title</p>
 
-          <input id="reviewTitle" name="reviewTitle" type="text" placeholder="Made my life so much easier..."
+          <input id="reviewTitle" required name="reviewTitle" type="text" placeholder="Made my life so much easier..."
             class="block w-full mt-4 px-5 py-3 text-center text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300" />
         </div>
         <div>

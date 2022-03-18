@@ -13,6 +13,7 @@
 // The function ultimately returns the average of all metrics, across all the reviews left for a company, so will be our headline number.
 
 const internalCalcs = (reviews) => {
+  // console.log(reviews)
   const averages = {
     overallScore: 0,
     features: 0,
