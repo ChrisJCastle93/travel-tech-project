@@ -46,4 +46,4 @@ Project is: _complete_
 - **To do**: I had a list of additional features planned and prioritised using RICE framework. You can read more about them [_here_] (https://chrisjcastle93.medium.com/how-i-built-this-a-2-week-node-express-full-stack-app-to-help-tour-operators-choose-their-tech-ca9b8ce1ebac)
 
 ## Contact
-feel free to [_contact_](mailto:chrisjcastle93@gmail.com) me
+Feel free to [_contact_](mailto:chrisjcastle93@gmail.com) me
