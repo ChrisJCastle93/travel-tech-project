@@ -1,89 +1,48 @@
 # Trusted Travel Tech
-> Outline a brief description of your project.
+> A Node/Express review website where tour operators and attractions can rate the reservation technology they're using. Peers can read the reviews, and choose the rich technology for their business.
 > Live demo [_here_](https://www.trustedtraveltech.com)
-
-## Table of Contents
-* [General Info](#general-information)
-* [Technologies Used](#technologies-used)
-* [Features](#features)
-* [Screenshots](#screenshots)
-* [Setup](#setup)
-* [Usage](#usage)
-* [Project Status](#project-status)
-* [Room for Improvement](#room-for-improvement)
-* [Acknowledgements](#acknowledgements)
-* [Contact](#contact)
-<!-- * [License](#license) -->
-
+> Medium Blog [ _here_ ] (https://chrisjcastle93.medium.com/how-i-built-this-a-2-week-node-express-full-stack-app-to-help-tour-operators-choose-their-tech-ca9b8ce1ebac)
 
 ## General Information
-- Provide general information about your project here.
-- What problem does it (intend to) solve?
-- What is the purpose of your project?
-- Why did you undertake it?
-<!-- You don't have to answer all the questions - just the ones relevant to your project. -->
+I work in the travel industry, and know that operators have a hard time choosing technology to help them run their business. Operator forums are chock-full of people asking for advice from their peers about which technology to choose.
 
+This is the problem I selected to solve, and thought a review site specifically for this niche would be a good solution.
+
+I built this in two weeks as part of Ironhack's part-time Web Development Bootcamp as my second project, and is my first full stack app. 
 
 ## Technologies Used
-- Tech 1 - version 1.0
-- Tech 2 - version 2.0
-- Tech 3 - version 3.0
-
+- Node 
+- Express
+- Mongo
+- Mongoose
+- Handlebars
+- Axios
+- bcrypt
+- Jest
+- Nodemailer
+- Passport
+- Tailwind
+- Twitter API
+- Heroku
 
 ## Features
-List the ready features here:
-- Awesome feature 1
-- Awesome feature 2
-- Awesome feature 3
-
-
-## Screenshots
-![Example screenshot](./img/screenshot.png)
-<!-- If you have screenshots you'd like to share, include them here. -->
-
-
-## Setup
-What are the project requirements/dependencies? Where are they listed? A requirements.txt or a Pipfile.lock file perhaps? Where is it located?
-
-Proceed to describe how to install / setup one's local environment / get started with the project.
-
+- **Auth**: Users can sign up and login, either using their email/password (bcrypt) or Google SSO (passport). Users are also able to verify their sign up over email, using Nodemailer.
+- **Reviews**: Once logged in, they're able to fill in a form to leave a review about a created company. This requires 3 models (Users, Reviews, Companies).
+- **Filters**: Users are able to filter reviews to narrow in on company's that suits their needs, using DOM manipulation.
+- **Twitter Bot**: When a review is left, it's tweeted out with a link to the handle @TrustedTravelT
+- **Tests**: I used TTD using Jest.
 
 ## Usage
-How does one go about using it?
-Provide various use cases and code examples here.
-
-`write-your-code-here`
-
+You can run this app after cloning by using `npm start`
 
 ## Project Status
-Project is: _in progress_ / _complete_ / _no longer being worked on_. If you are no longer working on it, provide reasons why.
-
+Project is: _complete_
 
 ## Room for Improvement
-Include areas you believe need improvement / could be improved. Also add TODOs for future development.
 
-Room for improvement:
-- Improvement to be done 1
-- Improvement to be done 2
+- **SEO Optimization**: I currently have a lighthouse score of 84 after purging Tailwind, but I could do more in terms of adding alt tags, meta descriptions etc
 
-To do:
-- Feature to be added 1
-- Feature to be added 2
-
-
-## Acknowledgements
-Give credit here.
-- This project was inspired by...
-- This project was based on [this tutorial](https://www.example.com).
-- Many thanks to...
-
+- **To do**: I had a list of additional features planned and prioritised using RICE framework. You can read more about them [_here_] (https://chrisjcastle93.medium.com/how-i-built-this-a-2-week-node-express-full-stack-app-to-help-tour-operators-choose-their-tech-ca9b8ce1ebac)
 
 ## Contact
-Created by [@flynerdpl](https://www.flynerd.pl/) - feel free to contact me!
-
-
-<!-- Optional -->
-<!-- ## License -->
-<!-- This project is open source and available under the [... License](). -->
-
-<!-- You don't have to include all sections - just the one's relevant to your project -->
+feel free to [_contact_](mailto:chrisjcastle93@gmail.com) me
