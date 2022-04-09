@@ -1,7 +1,8 @@
 # Trusted Travel Tech
-> A Node/Express review website where tour operators and attractions can rate the reservation technology they're using. Peers can read the reviews, and choose the rich technology for their business.
-> Live demo [_here_](https://www.trustedtraveltech.com)
-> Medium Blog [ _here_ ] (https://chrisjcastle93.medium.com/how-i-built-this-a-2-week-node-express-full-stack-app-to-help-tour-operators-choose-their-tech-ca9b8ce1ebac)
+A Node/Express review website where tour operators and attractions can rate the reservation technology they're using. Peers can read the reviews, and choose the rich technology for their business.
+
+- Live demo [_here_](https://www.trustedtraveltech.com)
+- Medium Blog [ _here_ ] (https://chrisjcastle93.medium.com/how-i-built-this-a-2-week-node-express-full-stack-app-to-help-tour-operators-choose-their-tech-ca9b8ce1ebac)
 
 ## General Information
 I work in the travel industry, and know that operators have a hard time choosing technology to help them run their business. Operator forums are chock-full of people asking for advice from their peers about which technology to choose.
