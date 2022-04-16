@@ -4768,7 +4768,7 @@ function validateEmail() {
   }
 }
 
-// Below, we have frontend form validation that prevents a user from trying to sign up with an invalid password, enhancing security. 
+// Below, we have frontend form validation that prevents a user from trying to sign up with an invalid password, enhancing security.
 
 function passwordPass(e) {
   const password = document.getElementById("password").value;
@@ -4791,102 +4791,49 @@ const checkedFilters = {
   features: false,
   customerSupport: false,
   valueForMoney: false,
-  distribution: false
+  distribution: false,
 };
 
-// function toggleClassList(method, id, classLists) {
-//   document.getElementById(id).classList[method](...classLists);
-// }
+const toggleListFilters = function (element, classList, property) {
+  return function curried_func(e) {
+    if (checkedFilters[property] == false) {
+      checkedFilters[property] = true;
+    } else {
+      checkedFilters[property] = false;
+    }
+    classList.map((cl) => {
+      document.getElementById(element).classList.toggle(cl);
+    });
+    runFilters(checkedFilters);
+  };
+};
 
-document.getElementById("featureEasy").addEventListener("click", () => {
-  if (!checkedFilters.easy) {
-    checkedFilters.easy = true;
-  } else {
-    checkedFilters.easy = false;
-  }
-  document.getElementById("featureEasy").classList.toggle("bg-blue-100");
-  document.getElementById("featureEasy").classList.toggle("border-blue-600");
-  document.getElementById("featureEasy").classList.toggle("border-solid");
-  document.getElementById("featureEasy").classList.toggle("border-4");
-  runFilters(checkedFilters);
-});
+const filterList = ["featureEasy", "featureFeature", "featureSupport", "featureValue", "featureDistribution"];
+const propertyList = ["easy", "features", "customerSupport", "valueForMoney", "distribution"];
+const classList = ["border-blue-600", "border-2", "bg-blue-100", "border-solid"];
 
-document.getElementById("featureFeature").addEventListener("click", () => {
-  if (!checkedFilters.features) {
-    checkedFilters.features = true;
-  } else {
-    checkedFilters.features = false;
-  }
-  document.getElementById("featureFeature").classList.toggle("bg-blue-100");
-  document.getElementById("featureFeature").classList.toggle("border-blue-600");
-  document.getElementById("featureFeature").classList.toggle("border-solid");
-  document.getElementById("featureFeature").classList.toggle("border-4");
-  runFilters(checkedFilters);
-});
-
-document.getElementById("featureSupport").addEventListener("click", () => {
-  if (!checkedFilters.customerSupport) {
-    checkedFilters.customerSupport = true;
-  } else {
-    checkedFilters.customerSupport = false;
-  }
-  document.getElementById("featureSupport").classList.toggle("bg-blue-100");
-  document.getElementById("featureSupport").classList.toggle("border-blue-600");
-  document.getElementById("featureSupport").classList.toggle("border-solid");
-  document.getElementById("featureSupport").classList.toggle("border-4");
-  runFilters(checkedFilters);
-});
-
-document.getElementById("featureValue").addEventListener("click", () => {
-  if (!checkedFilters.valueForMoney) {
-    checkedFilters.valueForMoney = true;
-  } else {
-    checkedFilters.valueForMoney = false;
-  }
-  document.getElementById("featureValue").classList.toggle("border-blue-600");
-  document.getElementById("featureValue").classList.toggle("bg-blue-100");
-  document.getElementById("featureValue").classList.toggle("border-solid");
-  document.getElementById("featureValue").classList.toggle("border-4");
-  runFilters(checkedFilters);
-});
-
-document.getElementById("featureDistribution").addEventListener("click", () => {
-  if (!checkedFilters.distribution) {
-    checkedFilters.distribution = true;
-  } else {
-    checkedFilters.distribution = false;
-  }
-  document.getElementById("featureDistribution").classList.toggle("bg-blue-100");
-  document.getElementById("featureDistribution").classList.toggle("border-blue-600");
-  document.getElementById("featureDistribution").classList.toggle("border-solid");
-  document.getElementById("featureDistribution").classList.toggle("border-4");
-  runFilters(checkedFilters);
+filterList.forEach((filter, index) => {
+  document.getElementById(filter).addEventListener("click", toggleListFilters(filter, classList, propertyList[index]));
 });
 
 const runFilters = (checkedFilters) => {
+  const filterScore = 4
   const companies = Array.from(document.getElementsByClassName("companyDOM"));
   companies.forEach((company) => {
     let doesThisCompanyPass = true;
     for (key in checkedFilters) {
       if (checkedFilters[key]) {
-        console.log("CHECKING COMPANIES FOR", key);
-        console.log("COMPANY SCORE FOR", key, Number(company.getAttribute(`data-${key}`)));
-        if (Number(company.getAttribute(`data-${key}`)) < 4) {
-          console.log(`company does not pass for ${key}, marking false.`);
+        if (Number(company.getAttribute(`data-${key}`)) < filterScore) {
           doesThisCompanyPass = false;
         } else {
-        console.log(`company DOES pass for ${key}, marking true.`);
         }
       }
     }
-    console.log("DID COMPANY PASS", doesThisCompanyPass);
     if (!doesThisCompanyPass) {
-      company.classList.add("invisible");
-      company.classList.add("h-0", "mt-0");
+      company.classList.add("h-0", "mt-0", "invisible");
       company.classList.remove("mt-12");
     } else {
-      company.classList.remove("invisible");
-      company.classList.remove("h-0", "mt-0");
+      company.classList.remove("h-0", "mt-0", "invisible");
       company.classList.add("mt-12");
     }
   });
