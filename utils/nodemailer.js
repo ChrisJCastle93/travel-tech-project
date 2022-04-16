@@ -5,7 +5,7 @@ const nodemailerSetup = async () => {
   let transporter = await nodemailer.createTransport({
     service: "Gmail", // can switch for 'hotmail'
     auth: {
-      user: "chrisjcastle93@gmail.com",
+      user: process.env.EMAIL_ADDRESS,
       pass: process.env.GMAIL_PASS,
     },
   });

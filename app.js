@@ -33,7 +33,7 @@ const app = express();
 
 // ESTABLISH DB CONNECTION
 
-const clientP = mongoose
+const clientPromise = mongoose
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -60,7 +60,7 @@ app.use(
       maxAge: 10060000,
     },
     store: MongoStore.create({
-      clientPromise: clientP,
+      clientPromise: clientPromise,
       dbName: "prod",
       stringify: false,
       autoRemove: "interval",

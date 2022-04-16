@@ -41,7 +41,7 @@
                   <div>
                     <label for="email"   class="block text-sm font-medium text-neutral-600"> Email address </label>
                     <div class="mt-1">
-                      <input id="email" onkeyup="return professionalEmailOnly(event)" name="email" type="email" autocomplete="email" required="" placeholder="Your Email" class="block w-full px-5 py-3 text-base placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300" />
+                      <input id="email" onkeyup="return validateEmail()" name="email" type="email" autocomplete="email" required="" placeholder="Your Email" class="block w-full px-5 py-3 text-base placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300" />
                     <p id="emailError" class="invisible h-0 text-xs text-gray-600"> ❗ Please use your professional email address.</p>
                     </div>
                   </div>

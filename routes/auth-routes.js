@@ -6,39 +6,34 @@ const passport = require("passport");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const bcryptSalt = 10;
-const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
-const filteredDomains = require("../public/javascripts/filteredDomains");
-const nodemailer = require("nodemailer");
-const nodemailerSetup = require('../public/javascripts/nodemailer');
+const { isLoggedOut } = require("../middleware/route-guard");
+const nodemailerSetup = require("../utils/nodemailer");
+const getNewConfirmationCode = require("../utils/confirmationCode");
 
 // SIGNUP ROUTES, implemented with server-side validation on the email and password used. Users are also issued a verification code over email to verify their sign up.
 
-router.get("/signup", isLoggedOut, (req, res, next) => res.render("auth/signup", { layout: false }));
+router.get("/signup", isLoggedOut, (_req, res, _next) => res.render("auth/signup", { layout: false }));
 
 router.post("/signup", isLoggedOut, (req, res, next) => {
   const { firstName, lastName, email, password, companyName } = req.body;
+
   const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+
   if (!regex.test(password)) {
     res.status(500).render("auth/signup", { layout: false, errorMessage: "Password needs to have at least 6 chars and must contain at least one number, one lowercase and one uppercase letter." });
     return;
   }
-  if (filteredDomains.indexOf(email.split("@")[1]) !== -1) {
-    res.status(500).render("auth/signup", { layout: false, errorMessage: "Email needs to be a professional email address." });
-    return;
-  }
+
   if (!email || !password) {
-    console.log("USERNAME OR PASSWORD MISSING");
     res.render("auth/signup", {
       layout: false,
       errorMessage: "Indicate username and password",
     });
     return;
   }
-  const characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  let confirmationCode = "";
-  for (let i = 0; i < 25; i++) {
-    confirmationCode += characters[Math.floor(Math.random() * characters.length)];
-  }
+
+  const confirmationCode = getNewConfirmationCode();
+
   User.findOne({ email })
     .then((user) => {
       if (user !== null) {
@@ -49,8 +44,10 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
         });
         return;
       }
+
       const salt = bcrypt.genSaltSync(bcryptSalt);
       const hashPass = bcrypt.hashSync(password, salt);
+
       User.create({
         firstName: firstName,
         lastName: lastName,
@@ -60,30 +57,31 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
         password: hashPass,
         confirmationCode,
       })
+
         .then((user) => {
-          console.log("new user created ", user);
           req.session.currentUser = user;
           res.redirect("/reviews/new");
           return nodemailerSetup();
         })
+
         .then((transporter) => {
           return transporter.sendMail({
-            from: "Chris Castle <chrisjcastle93@gmail.com>",
+            from: "Chris Castle",
             to: req.session.currentUser.email,
             subject: "TrustedTravelTech - Verify Your Email",
             text: confirmationCode,
             html: `<a href='https://www.trustedtraveltech.com/auth/confirm/${confirmationCode}'>Verify Email</a>`,
           });
         })
+
         .catch((err) => next(err));
     })
+
     .catch((err) => {
       if (err instanceof mongoose.Error.ValidationError) {
-        console.log("FAILED SERVER SIDE VALIDATION");
-        res.status(500).render("auth/signup", { errorMessage: error.message });
+        res.status(422).render("auth/signup", { errorMessage: error.message });
       } else if (error.code === 11000) {
-        console.log("FAILED SERVER SIDE VALIDATION - NOT UNIQUE");
-        res.status(500).render("auth/signup", {
+        res.status(422).render("auth/signup", {
           errorMessage: "Username and email need to be unique. Either username or email is already used.",
         });
       } else {
@@ -94,7 +92,7 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
 
 // Route to verify email address - user clicks link in email, and this switches the boolean on verified in the User model from false to true;
 
-router.get("/auth/confirm/:confirmCode", (req, res, next) => {
+router.get("/auth/confirm/:confirmCode", (req, res, _next) => {
   const { confirmCode } = req.params;
   User.findOneAndUpdate({ confirmationCode: confirmCode }, { verified: true }, { new: true })
     .then((foundUser) => {
@@ -107,7 +105,7 @@ router.get("/auth/confirm/:confirmCode", (req, res, next) => {
 
 // LOGIN ROUTES - authed with Passport Local
 
-router.get("/login", isLoggedOut, (req, res, next) => {
+router.get("/login", isLoggedOut, (_req, res, _next) => {
   res.render("auth/login", { layout: false });
 });
 
@@ -125,7 +123,7 @@ router.post(
 
 router.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
-router.get("/auth/google/callback", passport.authenticate("google", { failureRedirect: "/auth/google/failure" }), function (req, res) {
+router.get("/auth/google/callback", passport.authenticate("google", { failureRedirect: "/auth/google/failure" }), function (_req, res) {
   res.redirect("/");
 });
 
