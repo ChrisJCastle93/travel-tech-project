@@ -21,17 +21,18 @@ router.post("/new", isLoggedIn, (req, res, next) => {
   let filteredProBullets;
   let filteredConBullets;
   let comp;
+
   const { companyBeingReviewed, overallScore, features, customerSupport, valueForMoney, easyToUse, distribution, proBullets, conBullets, reviewTitle } = req.body;
+
   const { _id } = req.session.currentUser;
-  console.log('FILTERED BULLETS:', filteredProBullets)
+
   if (!overallScore || !features || !customerSupport || !distribution || !valueForMoney || !easyToUse || !proBullets || !conBullets || !reviewTitle || !companyBeingReviewed) {
     Company.find().then((companies) => {
       return res.render("reviews/newreview", { user: req.session.currentUser, errorMessage: "Please complete all sections", companies, layout: false });
-    });
-    return;
+    }).catch(err => console.log(err));
   } else {
-    filteredProBullets = proBullets.filter(bullet => bullet !== '')
-    filteredConBullets = conBullets.filter(bullet => bullet !== '')
+    filteredProBullets = proBullets.filter((bullet) => bullet !== "");
+    filteredConBullets = conBullets.filter((bullet) => bullet !== "");
     if (req.body.companyName) {
       console.log("req.body.com exists");
       User.findByIdAndUpdate(_id, { companyName: req.body.companyName }, { new: true })
@@ -54,17 +55,17 @@ router.post("/new", isLoggedIn, (req, res, next) => {
       companyBeingReviewed: companyBeingReviewed,
     })
       .then((reviewFromDB) => {
-        console.log('ADDING REVIEW', reviewFromDB)
+        console.log("ADDING REVIEW", reviewFromDB);
         rev = reviewFromDB;
         return Company.findByIdAndUpdate(companyBeingReviewed, { $push: { reviews: reviewFromDB._id } }, { new: true });
       })
       .then((company) => {
-        comp = company
+        comp = company;
         sendTweet(rev, company);
         return User.findByIdAndUpdate(req.session.currentUser, { $push: { reviews: rev._id } }, { new: true });
       })
-      .then(user => {
-        console.log('user updated:', user.reviews)
+      .then((user) => {
+        console.log("user updated:", user.reviews);
         req.session.success = "Successfully left review";
         res.redirect(`/companies/${comp.id}`);
       })
