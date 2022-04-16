@@ -22,9 +22,9 @@ router.get("/:id", (req, res, _next) => {
     })
 
     .then((reviews) => {
-      const averagesObject = averagesObject(reviews);
+      const averagesObj = averagesObject(reviews);
       const overallReviewScore = getOverallReviewScore(reviews);
-      res.render("companyprofile", { user: req.session.currentUser, reviews, averagesObject, noReviews: reviews.length, overallReviewScore, comp });
+      res.render("companyprofile", { user: req.session.currentUser, reviews, averagesObj, noReviews: reviews.length, overallReviewScore, comp });
     })
 
     .catch((err) => console.log(err));
