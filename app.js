@@ -3,7 +3,6 @@ const cookieParser = require("cookie-parser");
 const express = require("express");
 const favicon = require("serve-favicon");
 const hbs = require("hbs");
-const mongoose = require("mongoose");
 const logger = require("morgan");
 const path = require("path");
 const session = require("express-session");
@@ -13,7 +12,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const flash = require("connect-flash");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-
+const clientPromise = require('./db/init');
 require("dotenv").config();
 
 // MONGOOSE SETUP
@@ -24,31 +23,12 @@ const debug = require("debug")(`${app_name}:${path.basename(__filename).split(".
 // MODEL SETUP
 
 const User = require("./models/user.js");
-const Review = require("./models/review.js");
-const Company = require("./models/company.js");
 
 // INITIALIZE EXPRESS
 
 const app = express();
 
-// ESTABLISH DB CONNECTION
-
-const clientPromise = mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-  })
-  .then((m) => {
-    console.log(`Connected to Mongo! Database name: "${m.connections[0].name}"`);
-    return m.connection.getClient();
-  })
-  .catch((err) => {
-    console.error("Error connecting to mongo", err);
-  });
-
-// SETTING UP SESSION AND COOKIES
+// ESTABLISH DB CONNECTION and SETTING UP SESSION AND COOKIES
 
 app.use(
   session({
