@@ -7,27 +7,24 @@ const { averagesObject, getOverallReviewScore } = require("../utils/averages");
 
 // Created an individual company page where you could see reviews left for that company. It require accessing the Company and User collections, sorting and deep-populating the query before calculating the averages and displaying all reviews.
 
-router.get("/:id", (req, res, _next) => {
+router.get("/:id", async (req, res, _next) => {
   const { id } = req.params;
 
-  let comp;
+  try {
 
-  Company.findById(id)
+    const comp = await Company.findById(id)
 
-    .then((company) => {
-      comp = company;
-      return Review.find({ companyBeingReviewed: company })
-        .sort({ createdAt: -1 })
-        .populate([{ path: "companyBeingReviewed" }, { path: "owner" }]);
-    })
+    const reviews = await Review.find({ companyBeingReviewed: comp }).sort({ createdAt: -1 }).populate([{ path: "companyBeingReviewed" }, { path: "owner" }])
 
-    .then((reviews) => {
-      const averagesObj = averagesObject(reviews);
-      const overallReviewScore = getOverallReviewScore(reviews);
-      res.render("companyprofile", { user: req.session.currentUser, reviews, averagesObj, noReviews: reviews.length, overallReviewScore, comp });
-    })
+    const averagesObj = averagesObject(reviews);
+    
+    const overallReviewScore = getOverallReviewScore(reviews);
 
-    .catch((err) => console.log(err));
+    res.render("companyprofile", { user: req.session.currentUser, reviews, averagesObj, noReviews: reviews.length, overallReviewScore, comp });
+
+  } catch (err) {
+    console.log(err)
+  }
 });
 
 // CRUD routes to be able to viwe and add companies to DB using Postman.
