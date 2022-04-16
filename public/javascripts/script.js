@@ -4757,7 +4757,7 @@ const filteredDomains = [
 
 // Below, we have frontend form validation that prevents a user from signing up with an email address with what is likely a personal domain.
 
-function professionalEmailOnly(e) {
+function validateEmail() {
   const email = document.getElementById("email").value;
   if (filteredDomains.indexOf(email.split("@")[1]) !== -1) {
     document.getElementById("emailError").classList.remove("invisible", "h-0");
@@ -4793,6 +4793,10 @@ const checkedFilters = {
   valueForMoney: false,
   distribution: false
 };
+
+// function toggleClassList(method, id, classLists) {
+//   document.getElementById(id).classList[method](...classLists);
+// }
 
 document.getElementById("featureEasy").addEventListener("click", () => {
   if (!checkedFilters.easy) {

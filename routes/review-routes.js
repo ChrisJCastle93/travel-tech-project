@@ -4,7 +4,7 @@ const Review = require("../models/review");
 const User = require("../models/user");
 const Company = require("../models/company");
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
-const sendTweet = require("../public/javascripts/twitter");
+const sendTweet = require("../utils/twitter");
 
 // Route to render new review form. We get the companies from the DB so that the users can select the relevant one from a dropdown in the review form.
 
