@@ -28,8 +28,8 @@ router.post("/new", isLoggedIn, async (req, res, next) => {
       .catch((err) => console.log(err));
   } else {
     try {
-      filteredProBullets = proBullets.filter((bullet) => !bullet);
-      filteredConBullets = conBullets.filter((bullet) => !bullet);
+      filteredProBullets = proBullets.filter((bullet) => bullet !== '');
+      filteredConBullets = conBullets.filter((bullet) => bullet !== "");
 
       if (req.body.companyName) {
         User.findByIdAndUpdate(_id, { companyName: req.body.companyName }, { new: true })
