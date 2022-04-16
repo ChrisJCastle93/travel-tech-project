@@ -19,7 +19,6 @@ router.get("/:id", (req, res, next) => {
         .populate([{ path: "companyBeingReviewed" }, { path: "owner" }]);
     })
     .then((reviews) => {
-      reviews.forEach(review => console.log(review.owner));
       const averagesObj = averagesObject(reviews);
       const overall = getOverallReviewScore(reviews);
       res.render("companyprofile", { user: req.session.currentUser, reviews, averagesObj, noReviews: reviews.length, overall, comp });
