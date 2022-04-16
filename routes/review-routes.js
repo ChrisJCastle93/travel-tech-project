@@ -16,59 +16,101 @@ router.get("/new", isLoggedIn, (req, res, next) => {
 
 // Post route for submitting the review. The frontend form is dynamic - if a user signed up through Google and didn't submit thier companyName they'll be shown that on the form. If we receive that info, we want to update the user in the DB with it. Then we go on to create the review, and then attribute that review to the company it was left about.
 
-router.post("/new", isLoggedIn, async (req, res, next) => {
+router.post("/new", isLoggedIn, (req, res, next) => {
+  let rev;
+  let filteredProBullets;
+  let filteredConBullets;
+  let comp;
+
   const { companyBeingReviewed, overallScore, features, customerSupport, valueForMoney, easyToUse, distribution, proBullets, conBullets, reviewTitle } = req.body;
+
   const { _id } = req.session.currentUser;
 
   if (!overallScore || !features || !customerSupport || !distribution || !valueForMoney || !easyToUse || !proBullets || !conBullets || !reviewTitle || !companyBeingReviewed) {
-    Company.find()
-      .then((companies) => {
-        return res.render("reviews/newreview", { user: req.session.currentUser, errorMessage: "Please complete all sections", companies, layout: false });
+    Company.find().then((companies) => {
+      return res.render("reviews/newreview", { user: req.session.currentUser, errorMessage: "Please complete all sections", companies, layout: false });
+    }).catch(err => console.log(err));
+  } else {
+    filteredProBullets = proBullets.filter((bullet) => bullet !== "");
+    filteredConBullets = conBullets.filter((bullet) => bullet !== "");
+    if (req.body.companyName) {
+      console.log("req.body.com exists");
+      User.findByIdAndUpdate(_id, { companyName: req.body.companyName }, { new: true })
+        .then((userInDb) => console.log(userInDb))
+        .catch((err) => console.log(err));
+    }
+    Review.create({
+      content: {
+        overallScore,
+        easyToUse,
+        valueForMoney,
+        features,
+        customerSupport,
+        distribution,
+        proBullets: filteredProBullets,
+        conBullets: filteredConBullets,
+        reviewTitle,
+      },
+      owner: _id,
+      companyBeingReviewed: companyBeingReviewed,
+    })
+      .then((reviewFromDB) => {
+        console.log("ADDING REVIEW", reviewFromDB);
+        rev = reviewFromDB;
+        return Company.findByIdAndUpdate(companyBeingReviewed, { $push: { reviews: reviewFromDB._id } }, { new: true });
+      })
+      .then((company) => {
+        comp = company;
+        sendTweet(rev, company);
+        return User.findByIdAndUpdate(req.session.currentUser, { $push: { reviews: rev._id } }, { new: true });
+      })
+      .then((user) => {
+        console.log("user updated:", user.reviews);
+        req.session.success = "Successfully left review";
+        res.redirect(`/companies/${comp.id}`);
       })
       .catch((err) => console.log(err));
-  } else {
-    try {
-      filteredProBullets = proBullets.filter((bullet) => !bullet);
-      filteredConBullets = conBullets.filter((bullet) => !bullet);
-
-      if (req.body.companyName) {
-        User.findByIdAndUpdate(_id, { companyName: req.body.companyName }, { new: true })
-          .then((userInDb) => console.log(userInDb))
-          .catch((err) => console.log(err));
-      }
-
-      const reviewFromDB = await Review.create({
-        content: {
-          overallScore,
-          easyToUse,
-          valueForMoney,
-          features,
-          customerSupport,
-          distribution,
-          proBullets: filteredProBullets,
-          conBullets: filteredConBullets,
-          reviewTitle,
-        },
-        owner: _id,
-        companyBeingReviewed: companyBeingReviewed,
-      });
-
-      const companyFromDB = await Company.findByIdAndUpdate(companyBeingReviewed, { $push: { reviews: reviewFromDB._id } }, { new: true });
-
-      sendTweet(reviewFromDB, companyFromDB);
-
-      User.findByIdAndUpdate(req.session.currentUser, { $push: { reviews: reviewFromDB._id } }, { new: true });
-
-      req.session.success = "Successfully left review";
-
-      res.redirect(`/companies/${companyFromDB.id}`);
-      
-    } catch (err) {
-
-      console.log(err);
-
-    }
   }
 });
+
+// I established routes to update and delete reviews, but de-prioritized this before launching the MVP.
+
+// // UPDATE
+// router.post("/:id/edit", isLoggedIn, (req, res, next) => {
+//   const { id } = req.params;
+//   const { overallScore, features, customerSupport, distribution, proBullets, conBullets, reviewTitle } = req.body;
+//   Review.findOneAndUpdate(
+//     id,
+//     {
+//       content: {
+//         overallScore,
+//         features,
+//         customerSupport,
+//         distribution,
+//         proBullets,
+//         conBullets,
+//         reviewTitle,
+//       },
+//     },
+//     { new: true }
+//   )
+//     .then((reviewFromDB) => {
+//       res.redirect("/"); // could change to user profile, need to pass in success message somehow.
+//     })
+//     .catch((err) => console.log(err));
+// });
+
+// // DELETE
+// router.post("/:id/delete", isLoggedIn, (req, res, next) => {
+//   const { id } = req.params;
+//   Review.findOneAndDelete(id)
+//     .then((deletedUser) => {
+//       res.redirect("/"); // could change to user profile, need to pass in success message somehow.
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       res.render("/user-profile", { errorMessage: "User could not be deleted. Please contact support." });
+//     });
+// });
 
 module.exports = router;
