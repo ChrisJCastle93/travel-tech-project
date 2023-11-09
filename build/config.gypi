@@ -349,7 +349,7 @@
     "v8_use_siphash": 1,
     "want_separate_host_toolset": 0,
     "xcode_version": "11.0",
-    "nodedir": "/Users/Chris/Library/Caches/node-gyp/17.1.0",
+    "nodedir": "/Users/Chris/Library/Caches/node-gyp/18.17.0",
     "standalone_static_library": 1
   }
 }

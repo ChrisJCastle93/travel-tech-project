@@ -1,5 +1,6 @@
 const express = require("express");
 const Company = require("../models/company");
+const User = require("../models/user");
 const router = express.Router();
 const { averagesObject, getOverallReviewScore } = require("../utils/averages");
 
@@ -9,18 +10,15 @@ router.get("/", (req, res, _next) => {
   Company.find()
 
     .populate("reviews")
-  
+
     .lean()
-  
+
     .then((companiesFromDb) => {
-
       companiesFromDb.forEach((company, index) => {
-
         if (company.reviews) {
           company.averages = averagesObject(company.reviews);
           company.overall = getOverallReviewScore(company.reviews);
         }
-
       });
 
       const companiesWithReviews = companiesFromDb.filter((company) => company.overall !== undefined);
@@ -36,9 +34,12 @@ router.get("/", (req, res, _next) => {
         company.index = index + 1;
       });
 
-      res.render("index", { user: req.session.currentUser, companies: mergedArr });
+      User.findOne({ _id: req.session?.passport?.user }).then((response) => {
+        const passportUser = response;
+        req.session.currentUser = passportUser;
+        return res.render("index", { user: req.session.currentUser || passportUser, companies: mergedArr });
+      });
     })
-
     .catch((err) => console.log(err));
 });
 

@@ -4813,7 +4813,7 @@ const propertyList = ["easy", "features", "customerSupport", "valueForMoney", "d
 const classList = ["border-blue-600", "border-2", "bg-blue-100", "border-solid"];
 
 filterList.forEach((filter, index) => {
-  document.getElementById(filter).addEventListener("click", toggleListFilters(filter, classList, propertyList[index]));
+  document.getElementById(filter)?.addEventListener("click", toggleListFilters(filter, classList, propertyList[index]));
 });
 
 const runFilters = (checkedFilters) => {

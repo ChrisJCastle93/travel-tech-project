@@ -10,7 +10,7 @@ const sendTweet = require("../utils/twitter");
 
 router.get("/new", isLoggedIn, (req, res, next) => {
   Company.find().then((companies) => {
-    res.render("reviews/newreview", { user: req.session.currentUser, companies, layout: false });
+    res.render("reviews/newreview", { user: req.session.passport.user, companies, layout: false });
   });
 });
 
@@ -18,17 +18,17 @@ router.get("/new", isLoggedIn, (req, res, next) => {
 
 router.post("/new", isLoggedIn, async (req, res, next) => {
   const { companyBeingReviewed, overallScore, features, customerSupport, valueForMoney, easyToUse, distribution, proBullets, conBullets, reviewTitle } = req.body;
-  const { _id } = req.session.currentUser;
+  const { _id } = req.session.passport?.user;
 
   if (!overallScore || !features || !customerSupport || !distribution || !valueForMoney || !easyToUse || !proBullets || !conBullets || !reviewTitle || !companyBeingReviewed) {
     Company.find()
       .then((companies) => {
-        return res.render("reviews/newreview", { user: req.session.currentUser, errorMessage: "Please complete all sections", companies, layout: false });
+        return res.render("reviews/newreview", { user: req.session.passport.user, errorMessage: "Please complete all sections", companies, layout: false });
       })
       .catch((err) => console.log(err));
   } else {
     try {
-      filteredProBullets = proBullets.filter((bullet) => bullet !== '');
+      filteredProBullets = proBullets.filter((bullet) => bullet !== "");
       filteredConBullets = conBullets.filter((bullet) => bullet !== "");
 
       if (req.body.companyName) {

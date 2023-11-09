@@ -11,19 +11,19 @@ router.get("/:id", async (req, res, _next) => {
   const { id } = req.params;
 
   try {
+    const comp = await Company.findById(id);
 
-    const comp = await Company.findById(id)
-
-    const reviews = await Review.find({ companyBeingReviewed: comp }).sort({ createdAt: -1 }).populate([{ path: "companyBeingReviewed" }, { path: "owner" }])
+    const reviews = await Review.find({ companyBeingReviewed: comp })
+      .sort({ createdAt: -1 })
+      .populate([{ path: "companyBeingReviewed" }, { path: "owner" }]);
 
     const averagesObj = averagesObject(reviews);
-    
+
     const overallReviewScore = getOverallReviewScore(reviews);
 
-    res.render("companyprofile", { user: req.session.currentUser, reviews, averagesObj, noReviews: reviews.length, overallReviewScore, comp });
-
+    res.render("companyprofile", { user: req.session.passport.user, reviews, averagesObj, noReviews: reviews.length, overallReviewScore, comp });
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 });
 
@@ -40,7 +40,7 @@ router.post("/new", (req, res, _next) => {
 
   if (!name || !logo || !intro || !pricing || !type || !usp || !website) {
     return res.render("reviews/new", {
-      user: req.session.currentUser,
+      user: req.session.passport.user,
       errorMessage: "Please complete all fields",
     });
   }

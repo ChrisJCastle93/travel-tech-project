@@ -1,7 +1,8 @@
 const passport = require("passport");
-const LocalStrategy = require('passport-local')
-const GoogleStrategy = require('passport-google-oauth20')
-const User = require('../models/user')
+const LocalStrategy = require("passport-local");
+const GoogleStrategy = require("passport-google-oauth20");
+const User = require("../models/user");
+const bcrypt = require("bcrypt");
 
 passport.serializeUser((user, cb) => {
   cb(null, user.id);
@@ -25,21 +26,30 @@ passport.use(
       passwordField: "password",
     },
     (req, email, password, done) => {
+
       User.findOne({ email })
         .then((user) => {
+          console.log(".then");
+
           if (!user) {
             req.session.error = "Invalid Login Details";
+            console.log("email is not registered");
             return done(null, false, {
               message: "That email is not registered",
             });
           }
+
+          console.log("compairing with bcrypt");
+
           bcrypt.compare(password, user.password).then((result) => {
             if (result) {
+              console.log("should successfully login");
               req.session.currentUser = user;
               req.session.success = "Successful Login";
               return done(null, user);
             } else {
               req.session.error = "Invalid Login Details";
+              console.log("incorrect pass");
               return done(null, false, {
                 message: "Password incorrect",
               });
